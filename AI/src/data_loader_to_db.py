@@ -6,24 +6,48 @@ import time
 def string_list_to_list(x):
     return x.strip('[]').replace('"', '').replace("'", '').split(',')
 
-df = pd.read_csv("../data/raw/RAW_recipes.csv")
-
-df = df[["name", "description", 'minutes', 'tags', 'steps', 'ingredients']]
-
-df['tags']=df['tags'].apply(lambda x: string_list_to_list(x))
-df['steps']=df['steps'].apply(lambda x: string_list_to_list(x))
-df['ingredients']=df['ingredients'].apply(lambda x: string_list_to_list(x))
+df = pd.read_csv("../../recipes.csv")
 
 values = json.loads(df.to_json(orient="records"))
 
+names = {}
+
 for i, value in enumerate(values):
-    res = requests.post("http://localhost:5000/recipe/add", json=value)
+    name = value["name"]
+    if name in names:
+        names[name] += 1
+        name += "-"+str(names[name])
+    else:
+        names[name] = 1
+        name += "-1"
+    
+    print(i, end="\r", flush=True)
+    nutrients = {
+        "calories": value["Calories"],
+        "protein": value["Protein"],
+        "fat": value["Fat"],
+        "sugar": value["Sugar"],
+        "sodium": value["Sodium"],
+        "iron": value["Iron"],
+        "vitamin_c": value["Vitamin C"],
+        "cholesterol": value["Cholesterol"],
+        "trans_fat": value["Trans Fat"],
+        "calcium": value["Calcium"],
+    }
+    new_val = {
+        "name": name,
+        "description": value["description"],
+        "minutes": value["minutes"],
+        "tags": value["tags"].split(", "),
+        "steps": value["steps"].split(", "),
+        "ingredients": value["ingredients"].split(", "),
+        "nutrients": nutrients, 
+    }
+    res = requests.post("http://localhost:5000/recipe/add", json=new_val)
 
     if res.status_code == 400 and not str(res.content).__contains__("E11000"):
         print(res.content)
         print(value)
+    time.sleep(0.1)
     
-    if (i+1)%500 == 0:
-        print(f"{i+1} samples done")
-        time.sleep(1)
         
