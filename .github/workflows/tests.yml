@@ -5,8 +5,12 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: 
-      name: test_env
+    env:
+      EAMIL: ${{ vars.EAMIL }}
+      SECRET: ${{ vars.SECRET }}
+      DATABASE: ${{ vars.DATABASE }}
+      PASSWORD: ${{ vars.PASSWORD }}
+      FRONTEND_URL: ${{ vars.FRONTEND_URL }}
       
     strategy:
       matrix:
