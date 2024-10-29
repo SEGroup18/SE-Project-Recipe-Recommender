@@ -32,7 +32,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          echo "test_env" ${{ test_env.EMAIL }}
           echo "EMAIL" ${{ EMAIL }}
           pip install pytest-cov
           cd backend
