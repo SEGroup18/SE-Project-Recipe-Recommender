@@ -38,7 +38,7 @@ for i, value in enumerate(values):
         "name": name,
         "description": value["description"],
         "minutes": value["minutes"],
-        "tags": value["tags"].split(", "),
+        "tags": value["tags"].split(","),
         "steps": value["steps"].split(", "),
         "ingredients": value["ingredients"].split(", "),
         "nutrients": nutrients, 

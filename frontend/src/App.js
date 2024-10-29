@@ -10,6 +10,7 @@ import Recipes from "./Components/Recipes";
 import RecipeRecommendations from "./Components/RecipeRecommendations";
 import NavBar from "./Components/Navbar";
 import Order from "./Components/Order";
+import { IngredientRecommender } from "./Components/IngredientRecommender";
 import { useState } from "react";
 
 function App() {
@@ -53,6 +54,10 @@ function App() {
           <Route path="reset-password/:token" element={<ChangePassword />} />
           <Route path="recommendations" element={<RecipeRecommendations />} />
           <Route path="order" element={<Order />} />
+          <Route
+            path="recipeByIngredient"
+            element={<IngredientRecommender />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

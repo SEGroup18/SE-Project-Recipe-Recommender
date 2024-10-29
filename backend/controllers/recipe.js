@@ -25,6 +25,30 @@ exports.getAllRecipes = (req, res) => {
     });
 };
 
+exports.getIngredients = (req, res) => {
+  Recipe.aggregate([
+    { $unwind: "$ingredients" },
+    { $group: { _id: null, allItems: { $addToSet: "$ingredients" } } },
+    { $project: { _id: 0, allItems: 1 } },
+  ]).exec((err, data) => {
+    if (err) {
+      return res.status(400).send({ error: err });
+    }
+
+    res.send(data[0]["allItems"]);
+  });
+};
+
+exports.getRecipesByIngredient = (req, res) => {
+  const { ingredients } = req.body;
+  Recipe.find({ ingredients: { $all: ingredients } }).exec((err, recipes) => {
+    if (err) {
+      return res.status(400).send({ error: err });
+    }
+    res.send(recipes);
+  });
+};
+
 exports.getSomeRecipes = (req, res) => {
   Recipe.aggregate()
     .sample(50)

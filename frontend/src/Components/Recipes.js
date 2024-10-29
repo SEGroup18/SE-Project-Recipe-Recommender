@@ -53,13 +53,17 @@ const Recipes = () => {
   const dataFiltered = filterData(searchQuery, recipes);
 
   const getRecipeRecommendations = (recipe) => {
-    server.get("/recommend/" + recipe)
-    .then((data) =>{
-        console.log("data", data.data.recommendations)
-        dispatch({type: 'SET_RECOMMENDATIONS', recommendations: data.data.recommendations})
+    server
+      .get("/recommend/" + recipe)
+      .then((data) => {
+        console.log("data", data.data.recommendations);
+        dispatch({
+          type: "SET_RECOMMENDATIONS",
+          recommendations: data.data.recommendations,
+        });
         navigate("/recommendations");
-    })
-    .catch((err) => alert(err.response.data.error));
+      })
+      .catch((err) => alert(err.response.data.error));
   };
   return (
     <div>
@@ -78,10 +82,16 @@ const Recipes = () => {
           component="h6"
           style={{ textAlign: "center", color: "black", margin: "3px 310px" }}
         >
-          Choose a recipe and we will give 10 recipe recommendations based on
-          your choice.
+          Choose a recipe and we will give recipe recommendations based on your
+          choice.
         </Typography>
-        <div style={{ display: "flex", justifyContent: "center" }}><SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} autoFocus /></div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            autoFocus
+          />
+        </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           {arrayChunk(...Array(dataFiltered), 12).map((row, i) => (
             <div
