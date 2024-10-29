@@ -5,7 +5,15 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    environment: 
+      name: test_env
+    env:
+      EAMIL: ${{ vars.EAMIL }}
+      SECRET: ${{ vars.SECRET }}
+      DATABASE: ${{ vars.DATABASE }}
+      PASSWORD: ${{ vars.PASSWORD }}
+      FRONTEND_URL: ${{ vars.FRONTEND_URL }}
+      
     strategy:
       matrix:
         node-version: [14.x]
@@ -26,18 +34,16 @@ jobs:
       - name: Install Python 3.9.18
         uses: actions/setup-python@v1
         with:
-          python-version: 3.9.18
+          python-version: 3.9.20
 
       - name: Install dependencies
         run: |
-          pip install pytest-cov
-          pip install -r requirements.txt
-          echo requirements installed
+          pip install pytest-cov requests
           cd backend
           npm install
-          npm run dev
+          npx nodemon &
 
       - name: Run the tests
         run: |
-          cd test
+          cd tests
           pytest
