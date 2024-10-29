@@ -32,7 +32,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          echo "EMAIL" ${{ EMAIL }}
+          echo "EMAIL" ${{ vars.EMAIL }}
           pip install pytest-cov
           cd backend
           npm install
