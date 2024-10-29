@@ -86,7 +86,6 @@ export const IngredientRecommender = () => {
 };
 
 const Recipe = ({ recipe }) => {
-  console.log(recipe);
   return (
     <Box
       sx={{

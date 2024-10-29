@@ -1,0 +1,49 @@
+name: Running Tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: 
+      name: test_env
+    env:
+      EAMIL: ${{ vars.EAMIL }}
+      SECRET: ${{ vars.SECRET }}
+      DATABASE: ${{ vars.DATABASE }}
+      PASSWORD: ${{ vars.PASSWORD }}
+      FRONTEND_URL: ${{ vars.FRONTEND_URL }}
+      
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Python 3.9.18
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9.20
+
+      - name: Install dependencies
+        run: |
+          pip install pytest-cov requests
+          cd backend
+          npm install
+          npx nodemon &
+
+      - name: Run the tests
+        run: |
+          cd tests
+          pytest
