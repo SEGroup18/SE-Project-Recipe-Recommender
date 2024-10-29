@@ -38,7 +38,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pytest-cov
+          pip install pytest-cov requests
           cd backend
           npm install
           npx nodemon &
