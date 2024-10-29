@@ -5,9 +5,8 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      MY_ENV_VAR: ${{ secrets.EMAIL }}
-      YOUR_ENV_VAR: ${{ github.test_env.EMAIL }}
+    environment: 
+      name: test_env
       
     strategy:
       matrix:
@@ -34,8 +33,6 @@ jobs:
       - name: Install dependencies
         run: |
           pip install pytest-cov
-          echo "MY_ENV_VAR: $MY_ENV_VAR"
-          echo "YOUR_ENV_VAR: $YOUR_ENV_VAR"
           cd backend
           npm install
           npm run dev
