@@ -49,6 +49,16 @@ exports.getRecipesByIngredient = (req, res) => {
   });
 };
 
+exports.getRecipesByIngredient = (req, res) => {
+  const { ingredients } = req.body;
+  Recipe.find({ ingredients: { $all: ingredients } }).exec((err, recipes) => {
+    if (err) {
+      return res.status(400).send({ error: err });
+    }
+    res.send(recipes);
+  });
+};
+
 exports.getSomeRecipes = (req, res) => {
   Recipe.aggregate()
     .sample(50)

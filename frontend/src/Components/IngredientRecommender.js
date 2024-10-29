@@ -86,6 +86,18 @@ export const IngredientRecommender = () => {
 };
 
 const Recipe = ({ recipe }) => {
+  console.log(recipe);
+
+  const handlePostRequest = (recipe) => {
+    server.post('/history', recipe)
+      .then(response => {
+        console.log('Recipe saved successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error saving recipe:', error);
+      });
+  };
+
   return (
     <Box
       sx={{
@@ -162,6 +174,18 @@ const Recipe = ({ recipe }) => {
                 </ListItem>
               ))}
             </List>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              sx={{ 
+                position: 'relative', 
+                bottom: 1, 
+                right: 1 
+              }}
+              onClick={() => handlePostRequest(recipe)}
+            >
+              Cooked the dish?
+            </Button>
           </Box>
         </Grid>
       </Grid>
