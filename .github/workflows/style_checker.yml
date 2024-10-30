@@ -15,6 +15,9 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - name: Install Prettier
+        run: npm install -g prettier
+
       - name: Prettify code
         uses: creyD/prettier_action@v4.0
         with:
