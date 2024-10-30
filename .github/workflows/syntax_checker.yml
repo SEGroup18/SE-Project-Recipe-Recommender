@@ -1,4 +1,4 @@
-name: Code Formatter and Syntax Check
+name: Syntax Check
 on:
   pull_request:
     branches:

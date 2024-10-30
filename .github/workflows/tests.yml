@@ -1,11 +1,11 @@
-name: Running Tests
+name: Tests
 
 on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: test_env
     env:
       EAMIL: ${{ vars.EAMIL }}
@@ -13,7 +13,7 @@ jobs:
       DATABASE: ${{ vars.DATABASE }}
       PASSWORD: ${{ vars.PASSWORD }}
       FRONTEND_URL: ${{ vars.FRONTEND_URL }}
-      
+
     strategy:
       matrix:
         node-version: [14.x]
