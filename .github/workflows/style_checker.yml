@@ -8,6 +8,8 @@ on:
 jobs:
   prettier:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.ACTIONS_PAT }}
 
     steps:
       - name: Checkout
