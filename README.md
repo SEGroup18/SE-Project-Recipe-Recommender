@@ -1,5 +1,6 @@
 # SE-Project-Recipe-Recommender
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7179508.svg)](https://doi.org/10.5281/zenodo.7179508)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14010680.svg)](https://doi.org/10.5281/zenodo.14010680)
 ![GitHub contributors](https://img.shields.io/github/contributors/devanshi39/SE-Project-Recipe-Recommender)
 ![License](https://img.shields.io/github/license/Kaksha/SE-Project-Recipe-Recommender)
 ![Code Size](https://img.shields.io/github/languages/code-size/kaksha/SE-Project-Recipe-Recommender)
@@ -16,8 +17,8 @@
 ![Discord](https://img.shields.io/discord/1027412417661120582)
 ![GitHub Workflow Status](https://github.com/devanshi39/SE-Project-Recipe-Recommender/actions/workflows/node-app.yml/badge.svg?branch=main)
 
-
 ## What is Recipe Recommendation System?
+
 Recipe Recommendation System helps users to select their favorite food category and recommends recipes based on it. The users are then able to view the recipe and the ingredients required, and place an order for those ingredients.
 
 This is the Home Page of the website.
@@ -25,26 +26,30 @@ This is the Home Page of the website.
 ![image](https://user-images.githubusercontent.com/23338660/194782226-17e5c173-b7ac-4f2a-816a-3ca7893ccd39.png)
 
 ## Tools and Technology Used
+
 ### Tools:
-1. AWS Cloud 
-We have used Amazon EC2 instances, with its supporting VPC's to host our application on cloud. This gives almost 99.7% uptime of the application.
+
+1. AWS Cloud
+   We have used Amazon EC2 instances, with its supporting VPC's to host our application on cloud. This gives almost 99.7% uptime of the application.
 2. Mongo DB Atlas
 3. Jupyter Notebook
 4. Jenkins for CI
 
 ### Technology:
+
 1. Node.js
 2. React.js
 3. Mongo DB
 4. Python3
 
 ## Getting Started (For local setup)
-* Clone this repository or download the zip file.
-* Run the ```npm install``` command inside the backend folder
-* Also run the ```npm install``` command inside the frontend folder
-* Create a .env file inside the backend folder and add credentials to the folder
-* Now, run ```npm run dev``` inside the backend folder and this will get the database and backend running
-* Lastly run ```npm start``` inside the frontend folder and the Website will running on http://localhost:3000/
+
+- Clone this repository or download the zip file.
+- Run the `npm install` command inside the backend folder
+- Also run the `npm install` command inside the frontend folder
+- Create a .env file inside the backend folder and add credentials to the folder
+- Now, run `npm run dev` inside the backend folder and this will get the database and backend running
+- Lastly run `npm start` inside the frontend folder and the Website will running on http://localhost:3000/
 
 ## Getting Started for AWS
 
@@ -62,6 +67,7 @@ http://ec2-3-238-67-17.compute-1.amazonaws.com:3000/
 You can view the descriptive project documentation [here](https://cook-cb056.web.app)
 
 ## Directory Structure
+
     │   .dvcignore
     │   .gitignore
     │   Citation.cff
@@ -207,8 +213,8 @@ You can view the descriptive project documentation [here](https://cook-cb056.web
             └───utils
                     index.js
 
-
 ## Contributors
+
 1. [Devanshi Savla](https://github.com/devanshi39)
 2. [Indranil Banerjee](https://github.com/indranil1)
 3. [Aditya Srivastava](https://github.com/adityasvat)
@@ -218,4 +224,3 @@ You can view the descriptive project documentation [here](https://cook-cb056.web
 To find out how you can contribute to this project, read the [CONTRIBUTING.md](https://github.com/devanshi39/SE-Project-Recipe-Recommender/blob/Indranil_Develop/Contributing.md) file
 
 The discord chat channel link is included in the file [CONTRIBUTING.md](https://github.com/devanshi39/SE-Project-Recipe-Recommender/blob/Indranil_Develop/Contributing.md)
-
