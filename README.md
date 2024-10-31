@@ -1,4 +1,5 @@
 # SE-Project-Recipe-Recommender
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7179508.svg)](https://doi.org/10.5281/zenodo.7179508)
 ![GitHub contributors](https://img.shields.io/github/contributors/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
 ![License](https://img.shields.io/github/license/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
@@ -18,7 +19,12 @@
 [![Style Checker](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/style_checker.yml/badge.svg)](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/style_checker.yml)
 [![Code formatter](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/code_formatter.yml/badge.svg)](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/code_formatter.yml)
 
+## Demo
+
+[![Watch the video](https://img.youtube.com/vi/0IJG0-tvfvI/maxresdefault.jpg)](https://youtu.be/0IJG0-tvfvI)
+
 ## What is Recipe Recommendation System?
+
 Recipe Recommendation System helps users to select their favorite food category and recommends recipes based on it. The users are then able to view the recipe and the ingredients required, and place an order for those ingredients.
 
 This is the Home Page of the website.
@@ -26,12 +32,15 @@ This is the Home Page of the website.
 ![image](https://user-images.githubusercontent.com/23338660/194782226-17e5c173-b7ac-4f2a-816a-3ca7893ccd39.png)
 
 ## Tools and Technology Used
+
 ### Tools:
+
 1. Mongo DB Atlas
 2. Visual Studio Code
 3. Github
 
 ### Technology:
+
 1. Node.js
 2. React.js
 3. Mongo DB
@@ -41,11 +50,8 @@ This is the Home Page of the website.
 
 To get a local copy up and running, follow the instructions in the [Installation Guide](INSTALL.md)
 
-## Video Demonstration
-
-[video](https://drive.google.com/file/d/1_feIWoAjwSuIMBCaOStx34JWHk_R2hNW/view?usp=share_link)
-
 ## Directory Structure
+
     │   .dvcignore
     │   .gitignore
     │   Citation.cff
@@ -192,7 +198,6 @@ To get a local copy up and running, follow the instructions in the [Installation
             │
             └───utils
                     index.js
-
 
 ## Contributing
 
