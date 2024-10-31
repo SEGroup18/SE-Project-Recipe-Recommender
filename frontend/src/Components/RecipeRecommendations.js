@@ -1,13 +1,14 @@
 import * as React from "react";
-import { Typography, CardContent, Card, Box } from "@mui/material";
+import { Typography, CardContent, Card, Box, Button } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import "./ToggleSwitch.css";
 import { useStateValue } from "../StateProvider";
 import { useNavigate } from "react-router-dom";
+import { server } from "../utils";
 
 
 const RecipeRecommendations = () => {
@@ -27,6 +28,35 @@ const RecipeRecommendations = () => {
   };
 
   const navigate = useNavigate();
+
+  const [savedRecipe, setSavedRecipe] = useState([]);
+  const user = useRef(JSON.parse(localStorage.getItem("user")));
+
+  useEffect(() => { 
+    console.log(user.current.history);
+    setSavedRecipe(user.current.history);
+  }, []);
+
+  const handlePostRequest = (recipe) => {
+    const isPresent = savedRecipe.includes(recipe._id);
+    console.log(savedRecipe, isPresent, recipe._id, user.current._id);
+    let modifiedRecipe = [];
+    
+    if (isPresent) {
+      modifiedRecipe = savedRecipe.filter(id => id !== recipe._id);
+    }else{
+      modifiedRecipe = [...savedRecipe, recipe._id];      
+    }
+    server.post('/recipe/history', {history: modifiedRecipe, userId: user.current._id})
+        .then(response => {
+          console.log('Recipe saved successfully:', response.data);
+        })
+        .catch(error => {
+          console.error('Error saving recipe:', error);
+        });  
+    localStorage.setItem("savedRecipe", JSON.stringify(modifiedRecipe));
+    setSavedRecipe(modifiedRecipe);
+  };
   
   
   return (
@@ -81,8 +111,16 @@ const RecipeRecommendations = () => {
                 </div>
               </AccordionSummary>
               <AccordionDetails>
+                <Button 
+                  variant="contained" 
+                  color="primary" 
+                  sx={{ mr: 2 }}
+                  onClick={() => handlePostRequest(key)}
+                >
+                  {savedRecipe.includes(key._id) ? "Remove from History" : "Add to History"}
+                </Button>
                 <Card className="card-style">
-                  <div sx={{ display: "flex" }}>
+                  <div sx={{ display: "flex" }}>                  
                     <Box
                       sx={{
                         display: "flex",
