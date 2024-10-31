@@ -38,7 +38,7 @@ This is the Home Page of the website.
 
 ## Installation
 
-To get a local copy up and running, follow the instructions in the [Installation Guide](INSTALL.md).
+To get a local copy up and running, follow the instructions in the [Installation Guide](INSTALL.md)
 
 ## Video Demonstration
 
