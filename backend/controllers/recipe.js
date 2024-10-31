@@ -16,7 +16,7 @@ exports.createRecipe = (req, res) => {
 
 /**
  * Retrieves all recipes from the database.
- * 
+ *
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  * @returns {void} Sends a response with the retrieved recipes or an error message.
@@ -35,7 +35,7 @@ exports.getAllRecipes = (req, res) => {
 
 /**
  * Retrieves the minimum and maximum calorie values from the recipes in the database.
- * 
+ *
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  * @returns {void} Sends a response with the minimum and maximum calorie values or an error message.
@@ -46,9 +46,9 @@ exports.getMinMaxCalories = (req, res) => {
       $group: {
         _id: null,
         minCalories: { $min: "$nutrients.calories" }, // Directly access the field
-        maxCalories: { $max: "$nutrients.calories" }  // Directly access the field
-      }
-    }
+        maxCalories: { $max: "$nutrients.calories" }, // Directly access the field
+      },
+    },
   ]).exec((err, result) => {
     if (err) {
       return res.status(400).send({ error: err });
@@ -65,6 +65,13 @@ exports.getMinMaxCalories = (req, res) => {
   });
 };
 
+/**
+ * Retrieves a list of unique ingredients from all recipes in the database.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {void} Sends a response with an array of unique ingredients or an error message.
+ */
 exports.getIngredients = (req, res) => {
   Recipe.aggregate([
     { $unwind: "$ingredients" },
@@ -79,6 +86,13 @@ exports.getIngredients = (req, res) => {
   });
 };
 
+/**
+ * Finds recipes that contain all specified ingredients.
+ *
+ * @param {Object} req - The request object, containing the ingredients array in req.body.
+ * @param {Object} res - The response object.
+ * @returns {void} Sends a response with recipes that match all specified ingredients or an error message.
+ */
 exports.getRecipesByIngredient = (req, res) => {
   const { ingredients } = req.body;
   Recipe.find({ ingredients: { $all: ingredients } }).exec((err, recipes) => {
@@ -89,7 +103,7 @@ exports.getRecipesByIngredient = (req, res) => {
   });
 };
 
-exports.addHistory =  async (req, res) => {
+exports.addHistory = async (req, res) => {
   try {
     const { userId, history } = req.body;
     const user = await User.findById(userId);
@@ -104,7 +118,7 @@ exports.addHistory =  async (req, res) => {
     if (history) {
       user.history = history;
       await user.save();
-      await user.populate('history');
+      await user.populate("history");
 
       return res.status(200).json({
         message: "Recipe saved successfully",
@@ -112,7 +126,7 @@ exports.addHistory =  async (req, res) => {
         data: user.history,
       });
     } else {
-      await user.populate('history');
+      await user.populate("history");
 
       return res.status(200).json({
         message: "List of saved recipes retrieved",
