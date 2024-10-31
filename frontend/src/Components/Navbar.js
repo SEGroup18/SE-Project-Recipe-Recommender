@@ -14,6 +14,7 @@ import { useStateValue } from "../StateProvider";
 import CreateIcon from "@mui/icons-material/Create";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EggIcon from "@mui/icons-material/Egg";
+import MonitorWeightIcon from '@mui/icons-material/MonitorWeight';
 import BookIcon from '@mui/icons-material/Book';
 import { useNavigate } from "react-router-dom";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -43,6 +44,12 @@ const NavBar = () => {
       listIcon: <EggIcon style={{ color: "white" }} />,
       listText: "Ingredient Search",
       to: "/recipeByIngredient",
+      display: token,
+    },
+    {
+      listIcon: <MonitorWeightIcon style={{ color: "white" }} />,
+      listText: "Diet Plan",
+      to: "/dietPlan",
       display: token,
     },
     {

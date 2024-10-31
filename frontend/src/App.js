@@ -11,6 +11,7 @@ import RecipeRecommendations from "./Components/RecipeRecommendations";
 import NavBar from "./Components/Navbar";
 import Order from "./Components/Order";
 import { IngredientRecommender } from "./Components/IngredientRecommender";
+import { DietPlan } from "./Components/DietPlan";
 import { History } from "./Components/History";
 
 function App() {
@@ -58,6 +59,10 @@ function App() {
           <Route
             path="recipeByIngredient"
             element={<IngredientRecommender />}
+          />
+          <Route
+            path="dietPlan"
+            element={<DietPlan />}
           />
         </Route>
       </Routes>

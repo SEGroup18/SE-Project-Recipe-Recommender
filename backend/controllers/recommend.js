@@ -10,7 +10,7 @@ exports.getRecommendation = async (req, res) => {
     const recommendations = await Recommendation.findOne({
       recipe: recipeID,
     }).populate("recipe recommendations");
-    
+
     if (recommendations) {
       return res.send(recommendations);
     }
