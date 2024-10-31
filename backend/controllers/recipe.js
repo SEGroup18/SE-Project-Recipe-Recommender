@@ -13,6 +13,13 @@ exports.createRecipe = (req, res) => {
   });
 };
 
+/**
+ * Retrieves all recipes from the database.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {void} Sends a response with the retrieved recipes or an error message.
+ */
 exports.getAllRecipes = (req, res) => {
   Recipe.find()
     .limit(1000)
@@ -25,6 +32,13 @@ exports.getAllRecipes = (req, res) => {
     });
 };
 
+/**
+ * Retrieves the minimum and maximum calorie values from the recipes in the database.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {void} Sends a response with the minimum and maximum calorie values or an error message.
+ */
 exports.getMinMaxCalories = (req, res) => {
   Recipe.aggregate([
     {

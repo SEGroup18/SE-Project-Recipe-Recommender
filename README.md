@@ -1,27 +1,23 @@
 # SE-Project-Recipe-Recommender
-
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14010680.svg)](https://doi.org/10.5281/zenodo.14010680)
-![GitHub contributors](https://img.shields.io/github/contributors/devanshi39/SE-Project-Recipe-Recommender)
-![License](https://img.shields.io/github/license/Kaksha/SE-Project-Recipe-Recommender)
-![Code Size](https://img.shields.io/github/languages/code-size/kaksha/SE-Project-Recipe-Recommender)
-![Issues](https://img.shields.io/github/issues/Kaksha/SE-Project-Recipe-Recommender)
-![Issues Closed](https://img.shields.io/github/issues-closed/kaksha/SE-Project-Recipe-Recommender)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7179508.svg)](https://doi.org/10.5281/zenodo.7179508)
+![GitHub contributors](https://img.shields.io/github/contributors/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
+![License](https://img.shields.io/github/license/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
+![Code Size](https://img.shields.io/github/languages/code-size/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
+![Issues](https://img.shields.io/github/issues/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
+![Issues Closed](https://img.shields.io/github/issues-closed/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
 ![JS](https://img.shields.io/badge/Javascript--Green)
 ![Python](https://img.shields.io/badge/Python--Green)
 ![HTML](https://img.shields.io/badge/HTML--Green)
 ![CSS](https://img.shields.io/badge/CSS--Green)
-![Repo Size](https://img.shields.io/github/repo-size/Kaksha/SE-Project-Recipe-Recommender)
-![GitHub forks](https://img.shields.io/github/forks/devanshi39/SE-Project-Recipe-Recommender?style=social)
-![GitHub language count](https://img.shields.io/github/languages/count/devanshi39/SE-Project-Recipe-Recommender)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/devanshi39/SE-Project-Recipe-Recommender)
+![Repo Size](https://img.shields.io/github/repo-size/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
+![GitHub forks](https://img.shields.io/github/forks/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender?style=social)
+![GitHub language count](https://img.shields.io/github/languages/count/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
 ![Discord](https://img.shields.io/discord/1027412417661120582)
-[![Tests](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/tests.yml/badge.svg)](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/tests.yml)
-[![Syntax Check](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/syntax_checker.yml/badge.svg)](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/syntax_checker.yml)
-[![Style Checker](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/style_checker.yml/badge.svg)](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/style_checker.yml)
-[![Code formatter](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/code_formatter.yml/badge.svg)](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/code_formatter.yml)
+![GitHub Workflow Status](https://github.com/devanshi39/SE-Project-Recipe-Recommender/actions/workflows/node-app.yml/badge.svg?branch=main)
+
 
 ## What is Recipe Recommendation System?
-
 Recipe Recommendation System helps users to select their favorite food category and recommends recipes based on it. The users are then able to view the recipe and the ingredients required, and place an order for those ingredients.
 
 This is the Home Page of the website.
@@ -29,48 +25,26 @@ This is the Home Page of the website.
 ![image](https://user-images.githubusercontent.com/23338660/194782226-17e5c173-b7ac-4f2a-816a-3ca7893ccd39.png)
 
 ## Tools and Technology Used
-
 ### Tools:
-
-1. AWS Cloud
-   We have used Amazon EC2 instances, with its supporting VPC's to host our application on cloud. This gives almost 99.7% uptime of the application.
-2. Mongo DB Atlas
-3. Jupyter Notebook
-4. Jenkins for CI
+1. Mongo DB Atlas
+2. Visual Studio Code
+3. Github
 
 ### Technology:
-
 1. Node.js
 2. React.js
 3. Mongo DB
 4. Python3
 
-## Getting Started (For local setup)
+## Installation
 
-- Clone this repository or download the zip file.
-- Run the `npm install` command inside the backend folder
-- Also run the `npm install` command inside the frontend folder
-- Create a .env file inside the backend folder and add credentials to the folder
-- Now, run `npm run dev` inside the backend folder and this will get the database and backend running
-- Lastly run `npm start` inside the frontend folder and the Website will running on http://localhost:3000/
-
-## Getting Started for AWS
-
-Please use the link below to access the application hosted on AWS EC2 instance
-We have done continuous integration with the help of Jenkins
-
-http://ec2-3-238-67-17.compute-1.amazonaws.com:3000/
+To get a local copy up and running, follow the instructions in the [Installation Guide](INSTALL.md).
 
 ## Video Demonstration
 
 [video](https://drive.google.com/file/d/1_feIWoAjwSuIMBCaOStx34JWHk_R2hNW/view?usp=share_link)
 
-## Project Documentation
-
-You can view the descriptive project documentation [here](https://cook-cb056.web.app)
-
 ## Directory Structure
-
     │   .dvcignore
     │   .gitignore
     │   Citation.cff
@@ -174,7 +148,9 @@ You can view the descriptive project documentation [here](https://cook-cb056.web
             │   │   AddressForm.js
             │   │   cards.css
             │   │   cards.scss
+            │   │   DietPlan.js
             │   │   Home.js
+            │   │   IngredientRecommender.js
             │   │   Navbar.js
             │   │   Order.js
             │   │   PaymentForm.js
@@ -216,14 +192,19 @@ You can view the descriptive project documentation [here](https://cook-cb056.web
             └───utils
                     index.js
 
-## Contributors
 
-1. [Devanshi Savla](https://github.com/devanshi39)
-2. [Indranil Banerjee](https://github.com/indranil1)
-3. [Aditya Srivastava](https://github.com/adityasvat)
-4. [Soha Bhatia](https://github.com/Sohabhatia)
-5. [Akruti Sinha](https://github.com/Akruti25)
+## Contributing
 
-To find out how you can contribute to this project, read the [CONTRIBUTING.md](https://github.com/devanshi39/SE-Project-Recipe-Recommender/blob/Indranil_Develop/Contributing.md) file
+We welcome contributions from everyone! If you'd like to contribute, please read the [Contributing Guidelines](CONTRIBUTING.md) for details on the code style, testing procedures, and submission process.
 
-The discord chat channel link is included in the file [CONTRIBUTING.md](https://github.com/devanshi39/SE-Project-Recipe-Recommender/blob/Indranil_Develop/Contributing.md)
+## Code of Conduct
+
+This project adheres to a [Code of Conduct](CODE-OF-CONDUCT.md) to promote a welcoming environment for everyone. Please take a moment to review it.
+
+## License
+
+Git homework is licensed under the MIT License. See the [LICENSE](License.md) file for more details.
+
+---
+
+Thank you for your interest in **SE-Project-Recipe-Recommender**! If you have any questions, feel free to reach out to the maintainers.

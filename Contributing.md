@@ -2,7 +2,7 @@
 
 First of all, thanks for thinking to contribute to our project❤️🎉
 
-Below mentioned are the guidelines for contributing to the CSC 510 SE-Project-Recipe-Recommender and packages, which are hosted on our [Project Page](https://github.com/Kaksha/SE-Project-Recipe-Recommender).
+Below mentioned are the guidelines for contributing to the CSC 510 SE-Project-Recipe-Recommender and packages, which are hosted on our [Project Page](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender).
 Please ensure that these guidelines are followed and any new ideas are encouraged, feel free to propose changes in the form of a pull request.
 
 #### Table Of Contents
@@ -26,8 +26,8 @@ Please ensure that these guidelines are followed and any new ideas are encourage
 
 ## Code of Conduct
 
-This project and everyone particpating in it is governed by [Code of Conduct](https://github.com/Kaksha/SE-Project-Recipe-Recommender/blob/main/CODE_OF_CONDUCT.md).
-Everyone contributing to this project should uphold this and any inappropriate behaviour should be reported to plal@ncsu.edu.
+This project and everyone particpating in it is governed by [Code of Conduct](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/blob/main/CODE_OF_CONDUCT.md).
+Everyone contributing to this project should uphold this and any inappropriate behaviour should be reported to sguttha@ncsu.edu or skaonda@ncsu.edu or snandak3@ncsu.edu.
 
 ## Doubts Related to Github
 
@@ -149,24 +149,11 @@ If you want to contribute and make an significant enhancement based on our proje
 
 The following are the team members who contributed and made this project.
 
-1. [Devanshi Savla](https://github.com/devanshi39)
-2. [Indranil Banerjee](https://github.com/indranil1)
-3. [Aditya Srivastava](https://github.com/adityasvat)
-4. [Soha Bhatia](https://github.com/Sohabhatia)
-5. [Akruti Sinha](https://github.com/Akruti25)
+1. [Sai Sameer Guttha](https://github.com/saisameer1998)
+2. [Swaraj Kaondal](https://github.com/SwarajKaondal)
+3. [Shourya Nanda Kumar](https://github.com/shouryank)
 
 ### Attribution
 
 The contribution file is based on atom(repository). Please check it out as it gives in-depth explanation of everything you need to include in your github
 repository, if you have read till this point congrats you have a lot of patience, happy coding.
-
-### Discord Chat Channel
-
-https://discord.gg/egAMuKQV
-
-![image](https://github.com/devanshi39/SE-Project-Recipe-Recommender/blob/Indranil_Develop/docs/Discord_Chat_Channel.jpeg)
-
-
-
-
-
