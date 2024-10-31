@@ -48,10 +48,10 @@ To get a local copy up and running, follow the instructions in the [Installation
     │   .dvcignore
     │   .gitignore
     │   Citation.cff
-    │   CODE_OF_CONDUCT.md
-    │   Contributing.md
-    │   Install.md
-    │   LICENSE
+    │   CODE-OF-CONDUCT.md
+    │   CONTRIBUTING.md
+    │   INSTALL.md
+    │   LICENSE.md
     │   package-lock.json
     │   package.json
     │   README.md
@@ -203,7 +203,7 @@ This project adheres to a [Code of Conduct](CODE-OF-CONDUCT.md) to promote a wel
 
 ## License
 
-Git homework is licensed under the MIT License. See the [LICENSE](License.md) file for more details.
+Git homework is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for more details.
 
 ---
 
