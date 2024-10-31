@@ -115,6 +115,10 @@ const Recipe = ({ recipe }) => {
         padding: 2,
         marginBottom: 2,
         boxShadow: 2,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        boxSizing: 'border-box',
       }}
     >
       <Grid container alignItems="center" justifyContent="space-between">
