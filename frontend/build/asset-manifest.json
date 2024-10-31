@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.80cfce8c.css",
+    "main.js": "/static/js/main.57b1f367.js",
+    "static/media/pizza.jpg": "/static/media/pizza.1f72bba24528c25baa73.jpg",
+    "static/media/chopsuey.jpg": "/static/media/chopsuey.bc29dbb3b686bb61ef64.jpg",
+    "static/media/burger.jpg": "/static/media/burger.cf9a6ac0fb5af0f2a8b1.jpg",
+    "static/media/sushi.jpg": "/static/media/sushi.f639ed8f1b7bdff2dd64.jpg",
+    "static/media/MainImage.jpg": "/static/media/MainImage.ccd530f5a3d1e89d2d94.jpg",
+    "static/media/mocktail.jpg": "/static/media/mocktail.4ca2527ee4626fab8130.jpg",
+    "static/media/breakfast.jpg": "/static/media/breakfast.15c5914fc20f58a4b76d.jpg",
+    "static/media/salad.jpg": "/static/media/salad.763e11ac4bd051cb34c0.jpg",
+    "static/media/brownies.jpg": "/static/media/brownies.68f64c1225d5ad73d672.jpg",
+    "static/media/chinese.jpg": "/static/media/chinese.588f85455e28c76756be.jpg",
+    "static/media/Mexican.jpg": "/static/media/Mexican.58d2b7b70203b5eb9f8f.jpg",
+    "index.html": "/index.html",
+    "main.80cfce8c.css.map": "/static/css/main.80cfce8c.css.map",
+    "main.57b1f367.js.map": "/static/js/main.57b1f367.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.80cfce8c.css",
+    "static/js/main.57b1f367.js"
+  ]
+}
