@@ -9,6 +9,7 @@ import {
   ListItem,
   Button,
   Grid,
+  Pagination,
 } from "@mui/material";
 import { server } from "../utils";
 
@@ -16,6 +17,8 @@ export const IngredientRecommender = () => {
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [recipes, setRecipes] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; // Set the number of recipes to display per page
 
   const handleSearch = () => {
     server
@@ -24,6 +27,7 @@ export const IngredientRecommender = () => {
       })
       .then((data) => {
         setRecipes(data.data);
+        setCurrentPage(1); // Reset to first page on new search
       })
       .catch((err) => alert(err.response.data.error));
   };
@@ -40,6 +44,14 @@ export const IngredientRecommender = () => {
       })
       .catch((err) => alert(err.response.data.error));
   }, []);
+
+  // Calculate the current recipes to display
+  const indexOfLastRecipe = currentPage * itemsPerPage;
+  const indexOfFirstRecipe = indexOfLastRecipe - itemsPerPage;
+  const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(recipes.length / itemsPerPage);
 
   return (
     <Box sx={{ mt: 4, mx: 2 }}>
@@ -75,12 +87,21 @@ export const IngredientRecommender = () => {
       </Box>
       <br />
       <Grid container spacing={2}>
-        {recipes.map((recipe, index) => (
+        {currentRecipes.map((recipe, index) => (
           <Grid item xs={12} sm={4} key={index}>
             <Recipe recipe={recipe} />
           </Grid>
         ))}
       </Grid>
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={(event, value) => setCurrentPage(value)}
+          variant="outlined"
+          shape="rounded"
+        />
+      </Box>
     </Box>
   );
 };
