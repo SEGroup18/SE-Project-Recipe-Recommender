@@ -9,12 +9,14 @@ const {
   getIngredients,
   getRecipesByIngredient,
   getMinMaxCalories,
+  addHistory,
 } = require("../controllers/recipe");
 const router = express.Router();
 
 router.post("/add", createRecipe);
 router.get("/all", getAllRecipes);
 router.post("/recipeByIngredient", getRecipesByIngredient);
+router.post("/history", addHistory);
 router.get("/ingredients", getIngredients);
 router.get("/dietPlan", getAllRecipes);
 router.get("/minMaxCalories", getMinMaxCalories)

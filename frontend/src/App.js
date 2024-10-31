@@ -12,6 +12,7 @@ import NavBar from "./Components/Navbar";
 import Order from "./Components/Order";
 import { IngredientRecommender } from "./Components/IngredientRecommender";
 import { DietPlan } from "./Components/DietPlan";
+import { History } from "./Components/History";
 
 function App() {
   const [
@@ -54,6 +55,7 @@ function App() {
           <Route path="reset-password/:token" element={<ChangePassword />} />
           <Route path="recommendations" element={<RecipeRecommendations />} />
           <Route path="order" element={<Order />} />
+          <Route path="history" element={<History />} />
           <Route
             path="recipeByIngredient"
             element={<IngredientRecommender />}

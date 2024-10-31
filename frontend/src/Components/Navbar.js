@@ -15,6 +15,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EggIcon from "@mui/icons-material/Egg";
 import MonitorWeightIcon from '@mui/icons-material/MonitorWeight';
+import BookIcon from '@mui/icons-material/Book';
 import { useNavigate } from "react-router-dom";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { initialState } from "../reducer";
@@ -35,7 +36,10 @@ const NavBar = () => {
       listText: "Login",
       to: "/login",
       display: !token,
-    },
+    },    
+  ];
+
+  const options = [
     {
       listIcon: <EggIcon style={{ color: "white" }} />,
       listText: "Ingredient Search",
@@ -47,34 +51,70 @@ const NavBar = () => {
       listText: "Diet Plan",
       to: "/dietPlan",
       display: token,
-    }
-  ];
+    },
+    {
+      listIcon: <BookIcon style={{ color: "white" }} />,
+      listText: "History",
+      to: "/history",
+      display: token,
+    },
+  ]
 
   return (
     <div>
       <AppBar position="sticky" style={{ background: "#022950" }}>
         <Toolbar>
-          <Button
-            style={{ textTransform: "capitalize" }}
-            onClick={() => navigate("/")}
-          >
+          <div style={{flexGrow: 1, width:'25%', display: "flex", alignItems: "center"}}>
+            <Button style={{textTransform: "capitalize"}} onClick={() => navigate("/")}>
             <IconButton>
               <Restaurant fontSize="large" style={{ color: "white" }} />
-            </IconButton>{" "}
-          </Button>
-
-          <Typography
-            style={{
-              flexGrow: 1,
-              color: "white",
-              cursor: "pointer",
-            }}
-            onClick={() => navigate("/")}
-            variant="h5"
-          >
+            </IconButton> </Button>
+            
+            <Typography
+              style={{
+                color: "white",
+                cursor:"pointer"                
+              }}
+              
+              onClick={() => navigate("/")}
+              variant="h5"
+            >
             The CookBook
-          </Typography>
+            </Typography>
 
+            {options.map(
+              (listItem, key) =>
+                listItem.display && (
+                  <ListItem
+                    button
+                    key={key}
+                    onClick={() => {
+                      navigate(listItem.to);
+                      window.scrollTo(0, 0);
+                    }}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      width: "auto",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <ListItemIcon sx={{ minWidth: "23px" }}>
+                        {listItem.listIcon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={
+                          <span>
+                            <b>{listItem.listText}</b>
+                          </span>
+                        }
+                      ></ListItemText>
+                    </div>
+                  </ListItem>
+                )
+            )}       
+          </div>
+           
           {menuItems.map(
             (listItem, key) =>
               listItem.display && (

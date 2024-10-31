@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { v4 } = require("uuid");
@@ -42,6 +43,11 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     salt: String,
+    history: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'Recipe',
+      default: []
+    },
   },
   {
     timestamps: true,
