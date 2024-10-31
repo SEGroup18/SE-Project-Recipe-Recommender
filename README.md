@@ -13,9 +13,10 @@
 ![GitHub forks](https://img.shields.io/github/forks/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender?style=social)
 ![GitHub language count](https://img.shields.io/github/languages/count/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
-![Discord](https://img.shields.io/discord/1027412417661120582)
-![GitHub Workflow Status](https://github.com/devanshi39/SE-Project-Recipe-Recommender/actions/workflows/node-app.yml/badge.svg?branch=main)
-
+[![Tests](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/tests.yml/badge.svg)](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/tests.yml)
+[![Syntax Check](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/syntax_checker.yml/badge.svg)](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/syntax_checker.yml)
+[![Style Checker](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/style_checker.yml/badge.svg)](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/style_checker.yml)
+[![Code formatter](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/code_formatter.yml/badge.svg)](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/actions/workflows/code_formatter.yml)
 
 ## What is Recipe Recommendation System?
 Recipe Recommendation System helps users to select their favorite food category and recommends recipes based on it. The users are then able to view the recipe and the ingredients required, and place an order for those ingredients.
