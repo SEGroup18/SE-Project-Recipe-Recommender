@@ -25,6 +25,31 @@ exports.getAllRecipes = (req, res) => {
     });
 };
 
+exports.getMinMaxCalories = (req, res) => {
+  Recipe.aggregate([
+    {
+      $group: {
+        _id: null,
+        minCalories: { $min: "$nutrients.calories" }, // Directly access the field
+        maxCalories: { $max: "$nutrients.calories" }  // Directly access the field
+      }
+    }
+  ]).exec((err, result) => {
+    if (err) {
+      return res.status(400).send({ error: err });
+    }
+
+    if (result.length === 0) {
+      return res.send({ minCalories: null, maxCalories: null });
+    }
+
+    res.send({
+      minCalories: result[0].minCalories,
+      maxCalories: result[0].maxCalories,
+    });
+  });
+};
+
 exports.getIngredients = (req, res) => {
   Recipe.aggregate([
     { $unwind: "$ingredients" },

@@ -14,6 +14,7 @@ import { useStateValue } from "../StateProvider";
 import CreateIcon from "@mui/icons-material/Create";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EggIcon from "@mui/icons-material/Egg";
+import MonitorWeightIcon from '@mui/icons-material/MonitorWeight';
 import { useNavigate } from "react-router-dom";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { initialState } from "../reducer";
@@ -41,6 +42,12 @@ const NavBar = () => {
       to: "/recipeByIngredient",
       display: token,
     },
+    {
+      listIcon: <MonitorWeightIcon style={{ color: "white" }} />,
+      listText: "Diet Plan",
+      to: "/dietPlan",
+      display: token,
+    }
   ];
 
   return (
