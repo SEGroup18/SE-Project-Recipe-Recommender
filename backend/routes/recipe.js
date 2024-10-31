@@ -8,6 +8,7 @@ const {
   deleteRecipe,
   getIngredients,
   getRecipesByIngredient,
+  getMinMaxCalories,
 } = require("../controllers/recipe");
 const router = express.Router();
 
@@ -15,6 +16,8 @@ router.post("/add", createRecipe);
 router.get("/all", getAllRecipes);
 router.post("/recipeByIngredient", getRecipesByIngredient);
 router.get("/ingredients", getIngredients);
+router.get("/dietPlan", getAllRecipes);
+router.get("/minMaxCalories", getMinMaxCalories)
 router.get("/some", getSomeRecipes);
 router.get("/:recipeID", getRecipe);
 router.patch("/:recipeID", updateRecipe);
