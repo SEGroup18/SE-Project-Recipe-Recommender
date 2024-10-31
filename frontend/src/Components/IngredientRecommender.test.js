@@ -4,8 +4,6 @@ import {
   screen,
   fireEvent,
   waitFor,
-  within,
-  getByTestId,
 } from "@testing-library/react";
 import IngredientRecommender from "./IngredientRecommender";
 import { server } from "../utils";
@@ -25,6 +23,7 @@ describe("IngredientRecommender", () => {
   const mockIngredients = ["Chicken", "Broccoli", "Garlic"];
   const mockRecipes = [
     {
+      _id: "recipe1",
       name: "Garlic Chicken",
       description: "A tasty chicken recipe with garlic.",
       minutes: 30,
@@ -37,10 +36,12 @@ describe("IngredientRecommender", () => {
   beforeEach(() => {
     server.get.mockResolvedValue({ data: mockIngredients });
     server.post.mockResolvedValue({ data: mockRecipes });
+    localStorage.setItem("user", JSON.stringify({ history: [] }));
   });
 
   afterEach(() => {
     jest.clearAllMocks();
+    localStorage.clear();
   });
 
   test("renders the component with default UI elements", async () => {
@@ -55,6 +56,48 @@ describe("IngredientRecommender", () => {
     await waitFor(() =>
       expect(server.get).toHaveBeenCalledWith("/recipe/ingredients")
     );
+  });
+
+  test("renders 'Add to History' button for unsaved recipe", async () => {
+    render(<IngredientRecommender />);
+    fireEvent.click(screen.getByRole("button", { name: /search recipes/i }));
+    await waitFor(() => screen.getByText("Garlic Chicken"));
+    expect(screen.getByText("Add to History")).toBeInTheDocument();
+  });
+
+  test("renders 'Remove from History' button for saved recipe", async () => {
+    localStorage.setItem("user", JSON.stringify({ history: ["recipe1"] }));
+    render(<IngredientRecommender />);
+    fireEvent.click(screen.getByRole("button", { name: /search recipes/i }));
+    await waitFor(() => screen.getByText("Garlic Chicken"));
+    expect(screen.getByText("Remove from History")).toBeInTheDocument();
+  });
+
+  test("clicking 'Add to History' button adds recipe to history", async () => {
+    render(<IngredientRecommender />);
+    fireEvent.click(screen.getByRole("button", { name: /search recipes/i }));
+    await waitFor(() => screen.getByText("Garlic Chicken"));
+    
+    fireEvent.click(screen.getByText("Add to History"));
+    
+    await waitFor(() => {
+      expect(server.post).toHaveBeenCalledWith('/recipe/history', expect.any(Object));
+      expect(screen.getByText("Remove from History")).toBeInTheDocument();
+    });
+  });
+
+  test("clicking 'Remove from History' button removes recipe from history", async () => {
+    localStorage.setItem("user", JSON.stringify({ history: ["recipe1"] }));
+    render(<IngredientRecommender />);
+    fireEvent.click(screen.getByRole("button", { name: /search recipes/i }));
+    await waitFor(() => screen.getByText("Garlic Chicken"));
+    
+    fireEvent.click(screen.getByText("Remove from History"));
+    
+    await waitFor(() => {
+      expect(server.post).toHaveBeenCalledWith('/recipe/history', expect.any(Object));
+      expect(screen.getByText("Add to History")).toBeInTheDocument();
+    });
   });
 });
 
