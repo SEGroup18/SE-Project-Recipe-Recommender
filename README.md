@@ -207,6 +207,10 @@ We welcome contributions from everyone! If you'd like to contribute, please read
 
 This project adheres to a [Code of Conduct](CODE-OF-CONDUCT.md) to promote a welcoming environment for everyone. Please take a moment to review it.
 
+## Application Guide
+
+Refer to the application Guide for using the application [Application Guide](Application_Guide.md)
+
 ## License
 
 Git homework is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for more details.
@@ -214,3 +218,7 @@ Git homework is licensed under the MIT License. See the [LICENSE](LICENSE.md) fi
 ---
 
 Thank you for your interest in **SE-Project-Recipe-Recommender**! If you have any questions, feel free to reach out to the maintainers.
+
+## Contact US
+
+EMAIL: cse510se.project@gmail.com
