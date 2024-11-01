@@ -14,13 +14,10 @@
 
 	const [recipes, setRecipes] = useState([]);
 	const user = useRef(JSON.parse(localStorage.getItem("user")));
-	const [savedRecipe, setSavedRecipe] = useState(JSON.parse(localStorage.getItem("savedRecipe")) || [])
+	const [savedRecipe, setSavedRecipe] = useState(JSON.parse(localStorage.getItem("savedRecipe")) || user.current.history)
 
 	useEffect(() => { 
 	const fetchRecipes = async () => {
-		if(savedRecipe == []){
-			setSavedRecipe(user.current.history)
-		}
 		const fetchedRecipes = [];	
 		for (const recipeId of savedRecipe) {
 			try {
