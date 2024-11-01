@@ -1,6 +1,6 @@
 # SE-Project-Recipe-Recommender
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7179508.svg)](https://doi.org/10.5281/zenodo.7179508)
+[![DOI](https://zenodo.org/badge/879307617.svg)](https://doi.org/10.5281/zenodo.14010679)
 ![GitHub contributors](https://img.shields.io/github/contributors/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
 ![License](https://img.shields.io/github/license/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
 ![Code Size](https://img.shields.io/github/languages/code-size/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender)
