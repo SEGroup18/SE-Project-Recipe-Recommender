@@ -1,238 +1,160 @@
 import React, { useRef, useEffect, useState } from "react";
-import TextField from "@mui/material/TextField";
-import {
-  Box,
-  Autocomplete,
-  Typography,
-  Chip,
-  List,
-  ListItem,
-  Button,
-  Grid,
-  Pagination,
-} from "@mui/material";
+import { Box, Autocomplete, Button, Grid, Pagination } from "@mui/material";
 import { server } from "../utils";
 
+/**
+ * IngredientRecommender Component
+ * This component allows users to search for recipes based on selected ingredients.
+ * It also lets users save or remove recipes from their history.
+ */
 export const IngredientRecommender = () => {
+  // State to manage available ingredient options
   const [options, setOptions] = useState([]);
+
+  // State to manage selected ingredients by the user
   const [selectedOptions, setSelectedOptions] = useState([]);
+
+  // State to hold the fetched recipes based on selected ingredients
   const [recipes, setRecipes] = useState([]);
+
+  // State to handle pagination of recipes
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // Set the number of recipes to display per page
+  const itemsPerPage = 6; // Number of recipes displayed per page
 
-  const handleSearch = () => {
-    server
-      .post("/recipe/recipeByIngredient", {
-        ingredients: selectedOptions.map((o) => o.title),
-      })
-      .then((data) => {
-        setRecipes(data.data);
-        setCurrentPage(1); // Reset to first page on new search
-      })
-      .catch((err) => alert(err.response.data.error));
-  };
-
+  // Fetch available ingredients when the component mounts
   useEffect(() => {
-    server
-      .get("/recipe/ingredients")
+    server.get("/recipe/ingredients")
       .then((data) => {
-        setOptions(
-          data.data.map((r) => {
-            return { title: r };
-          })
-        );
+        setOptions(data.data.map((r) => ({ title: r })));
       })
       .catch((err) => alert(err.response.data.error));
   }, []);
 
-  // Calculate the current recipes to display
+  // Handle search request based on selected ingredients
+  const handleSearch = () => {
+    server.post("/recipe/recipeByIngredient", {
+      ingredients: selectedOptions.map((o) => o.title),
+    })
+    .then((data) => {
+      setRecipes(data.data);
+      setCurrentPage(1); // Reset to first page on new search
+    })
+    .catch((err) => alert(err.response.data.error));
+  };
+
+  // Pagination logic to slice recipes for current page display
   const indexOfLastRecipe = currentPage * itemsPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - itemsPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-
-  // Calculate total pages
+  
+  // Calculate total pages for pagination
   const totalPages = Math.ceil(recipes.length / itemsPerPage);
 
-  return (
-    <Box sx={{ mt: 4, mx: 2 }}>
-      <Typography variant="h5" align="center" sx={{ mb: 2 }}>
-        Unsure what to create? Start by searching for ingredients, and discover
-        all the delicious recipes you can make!
-      </Typography>
-      <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-      >
-        <Autocomplete
-          multiple
-          options={options}
-          getOptionLabel={(option) => option.title}
-          value={selectedOptions}
-          onChange={(event, newValue) => {
-            setSelectedOptions(newValue);
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              variant="outlined"
-              label="Select Ingredients"
-              placeholder="Search..."
-              sx={{ minWidth: "500px" }}
-            />
-          )}
-          renderOption={(props, option) => <li {...props}>{option.title}</li>}
-        />
-        <Button variant="contained" onClick={handleSearch} sx={{ ml: 2 }}>
-          Search Recipes
-        </Button>
-      </Box>
-      <br />
-      <Grid container spacing={2}>
-        {currentRecipes.map((recipe, index) => (
-          <Grid item xs={12} sm={4} key={index}>
-            <Recipe recipe={recipe} />
-          </Grid>
-        ))}
-      </Grid>
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          onChange={(event, value) => setCurrentPage(value)}
-          variant="outlined"
-          shape="rounded"
-        />
-      </Box>
-    </Box>
-  );
-};
-
-const Recipe = ({ recipe }) => {
-
-  const [savedRecipe, setSavedRecipe] = useState([]);
+  // Fetch user details and saved recipe history from local storage
   const user = useRef(JSON.parse(localStorage.getItem("user")));
+  const [savedRecipe, setSavedRecipe] = useState(JSON.parse(localStorage.getItem("savedRecipe")) || user.current.history);
 
-  useEffect(() => { 
-    console.log(user.current.history);
-    setSavedRecipe(user.current.history);
-  }, []);
-
+  /**
+   * Handle saving or removing a recipe from the user's history.
+   * @param {Object} recipe - The recipe object to be saved or removed.
+   */
   const handlePostRequest = (recipe) => {
-    const isPresent = savedRecipe.includes(recipe._id);
-    console.log(savedRecipe, isPresent, recipe._id, user.current._id);
+    const isPresent = savedRecipe.includes(recipe._id); // Check if the recipe is already saved in history
     let modifiedRecipe = [];
-    
+
     if (isPresent) {
+      // Remove recipe from history if it's already present
       modifiedRecipe = savedRecipe.filter(id => id !== recipe._id);
-    }else{
-      modifiedRecipe = [...savedRecipe, recipe._id];      
+    } else {
+      // Add recipe to history if it's not present
+      modifiedRecipe = [...savedRecipe, recipe._id];
     }
-    server.post('/recipe/history', {history: modifiedRecipe, userId: user.current._id})
-        .then(response => {
-          console.log('Recipe saved successfully:', response.data);
-        })
-        .catch(error => {
-          console.error('Error saving recipe:', error);
-        });  
-    localStorage.setItem("savedRecipe", JSON.stringify(modifiedRecipe));
-    setSavedRecipe(modifiedRecipe);
+
+    // Update history on the server and local storage
+    server.post('/recipe/history', { history: modifiedRecipe, userId: user.current._id })
+      .then(response => {
+        console.log('Recipe saved successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error saving recipe:', error);
+      });
+
+    localStorage.setItem("savedRecipe", JSON.stringify(modifiedRecipe)); // Update local storage
+    setSavedRecipe(modifiedRecipe); // Update state with modified history
   };
 
   return (
-    <Box
-      sx={{
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-        padding: 2,
-        marginBottom: 2,
-        boxShadow: 2,
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        boxSizing: 'border-box',
-      }}
-    >
-      <Grid container alignItems="center" justifyContent="space-between">
-        <Grid item xs={12} sm={8}>
-          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-            {recipe.name}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "flex-end",
-            }}
-          >
-            {recipe.tags.map((tag, index) => (
-              <Chip
-                key={index}
-                label={tag}
-                variant="outlined"
-                color="primary"
-                sx={{
-                  margin: "2px",
-                  bgcolor: "#e3f2fd",
-                  borderColor: "#2196f3",
-                }}
-              />
-            ))}
-          </Box>
-        </Grid>
+    <div>
+      {/* Render search input and button */}
+      <Autocomplete 
+        options={options} 
+        value={selectedOptions}
+        onChange={(event, newValue) => setSelectedOptions(newValue)}
+        renderInput={(params) => <TextField {...params} label="Search Ingredients" />}
+      />
+      <Button onClick={handleSearch}>Search Recipes</Button>
+
+      {/* Render paginated list of recipes */}
+      <Grid container spacing={2}>
+        {currentRecipes.map((recipe) => (
+          <Grid item xs={12} sm={6} md={4} key={recipe._id}>
+            <Recipe 
+              recipe={recipe}
+              handlePostRequest={handlePostRequest}
+              savedRecipe={savedRecipe}
+            />
+          </Grid>
+        ))}
       </Grid>
 
-      <Typography variant="body1" sx={{ marginY: 1 }}>
-        {recipe.description}
-      </Typography>
+      {/* Pagination controls */}
+      <Pagination 
+        count={totalPages} 
+        page={currentPage} 
+        onChange={(event, value) => setCurrentPage(value)} 
+        variant="outlined" 
+        shape="rounded"
+      />
+    </div>
+  );
+};
+
+/**
+ * Recipe Component
+ * Displays individual recipe details and allows users to save or remove it from their history.
+ * @param {Object} props - The props for the component.
+ */
+const Recipe = ({ recipe, handlePostRequest, savedRecipe }) => {
+  return (
+    <Card>
+      <Typography variant="h6">{recipe.name}</Typography>
+      
+      {/* Display tags associated with the recipe */}
+      {recipe.tags.map((tag) => (
+        <Chip key={tag} label={tag} />
+      ))}
+
+      {/* Display cooking time if available */}
       {recipe.minutes && (
-        <Typography variant="body2" color="text.secondary">
-          Cooking Time: {recipe.minutes} minutes
-        </Typography>
+        <Typography>Cooking Time: {recipe.minutes} minutes</Typography>
       )}
 
-      <Grid container spacing={2} sx={{ marginY: 1 }}>
-        <Grid item xs={12} sm={8}>
-          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-            Steps:
-          </Typography>
-          <List dense sx={{ padding: 0 }}>
-            {recipe.steps.map((step, index) => (
-              <ListItem key={index} sx={{ padding: "4px 0" }}>
-                <Typography variant="body2">{step}</Typography>
-              </ListItem>
-            ))}
-          </List>
-        </Grid>
+      {/* Display steps and ingredients */}
+      <Typography>Steps:</Typography>
+      {recipe.steps.map((step, index) => (
+        <Typography key={index}>{step}</Typography>
+      ))}
 
-        <Grid item xs={12} sm={4}>
-          <Box>
-            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-              Ingredients:
-            </Typography>
-            <List dense sx={{ padding: 0 }}>
-              {recipe.ingredients.map((ingredient, index) => (
-                <ListItem key={index} sx={{ padding: "4px 0" }}>
-                  <Typography variant="body2">{ingredient}</Typography>
-                </ListItem>
-              ))}
-            </List>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              sx={{ 
-                position: 'relative', 
-                bottom: 1, 
-                right: 1 
-              }}
-              onClick={() => handlePostRequest(recipe)}
-            >
-              {savedRecipe.includes(recipe._id) ? "Remove from History" : "Add to History"}
-            </Button>
-          </Box>
-        </Grid>
-      </Grid>
-    </Box>
+      <Typography>Ingredients:</Typography>
+      {recipe.ingredients.map((ingredient, index) => (
+        <Typography key={index}>{ingredient}</Typography>
+      ))}
+
+      {/* Button to add or remove recipe from history */}
+      <Button onClick={() => handlePostRequest(recipe)}>
+        {savedRecipe.includes(recipe._id) ? "Remove from History" : "Add to History"}
+      </Button>
+    </Card>
   );
 };
 

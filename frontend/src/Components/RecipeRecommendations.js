@@ -10,190 +10,116 @@ import { useStateValue } from "../StateProvider";
 import { useNavigate } from "react-router-dom";
 import { server } from "../utils";
 
-
+/**
+ * RecipeRecommendations Component
+ * Displays a list of recommended recipes and allows users to add them to their cart or save them to their history.
+ */
 const RecipeRecommendations = () => {
-  const [{recommendations}, dispatch] = useStateValue();
+  // Access the global state to get recipe recommendations
+  const [{ recommendations }, dispatch] = useStateValue();
+
+  // State to manage the user's cart (selected recipes)
   const [cart, addItem] = useState([]);
+
+  /**
+   * Handles changes in the toggle switch for adding/removing recipes to/from the cart.
+   * @param {Object} e - The event object.
+   * @param {string} recipe_name - The name of the recipe being toggled.
+   * @param {Array} ingredients - The list of ingredients for the recipe.
+   */
   const handleChange = (e, recipe_name, ingredients) => {
     if (e.target.checked === true) {
-      addItem((old_cart) => [...old_cart, {name: recipe_name, ingredients:ingredients}]);
+      // Add the recipe to the cart if checked
+      addItem((old_cart) => [...old_cart, { name: recipe_name, ingredients: ingredients }]);
     } else {
+      // Remove the recipe from the cart if unchecked
       console.log("Remove");
       addItem((current) =>
         current.filter((element) => {
-          return element !== recipe_name;
+          return element.name !== recipe_name;
         })
       );
     }
   };
 
+  // Navigation hook for redirecting users
   const navigate = useNavigate();
 
-  const [savedRecipe, setSavedRecipe] = useState([]);
+  // Fetch user details and saved recipe history from local storage
   const user = useRef(JSON.parse(localStorage.getItem("user")));
+  const [savedRecipe, setSavedRecipe] = useState(JSON.parse(localStorage.getItem("savedRecipe")) || user.current.history);
 
-  useEffect(() => { 
-    console.log(user.current.history);
-    setSavedRecipe(user.current.history);
-  }, []);
-
+  /**
+   * Handles saving or removing a recipe from the user's history.
+   * @param {Object} recipe - The recipe object to be saved or removed.
+   */
   const handlePostRequest = (recipe) => {
-    const isPresent = savedRecipe.includes(recipe._id);
-    console.log(savedRecipe, isPresent, recipe._id, user.current._id);
+    const isPresent = savedRecipe.includes(recipe._id); // Check if the recipe is already in history
     let modifiedRecipe = [];
-    
+
     if (isPresent) {
-      modifiedRecipe = savedRecipe.filter(id => id !== recipe._id);
-    }else{
-      modifiedRecipe = [...savedRecipe, recipe._id];      
+      // Remove recipe from history if it's already present
+      modifiedRecipe = savedRecipe.filter((id) => id !== recipe._id);
+    } else {
+      // Add recipe to history if it's not present
+      modifiedRecipe = [...savedRecipe, recipe._id];
     }
-    server.post('/recipe/history', {history: modifiedRecipe, userId: user.current._id})
-        .then(response => {
-          console.log('Recipe saved successfully:', response.data);
-        })
-        .catch(error => {
-          console.error('Error saving recipe:', error);
-        });  
-    localStorage.setItem("savedRecipe", JSON.stringify(modifiedRecipe));
-    setSavedRecipe(modifiedRecipe);
+
+    // Update history on the server and local storage
+    server.post("/recipe/history", { history: modifiedRecipe, userId: user.current._id })
+      .then((response) => {
+        console.log("Recipe saved successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error saving recipe:", error);
+      });
+
+    localStorage.setItem("savedRecipe", JSON.stringify(modifiedRecipe)); // Update local storage
+    setSavedRecipe(modifiedRecipe); // Update state with modified history
   };
-  
-  
+
   return (
-    <React.Fragment>
-      <Typography
-        variant="h4"
-        component="h5"
-        style={{ margin: "20px", textAlign: "center" }}
-      >
-        Here are our recommendations:
-      </Typography>
+    <Box>
+      <Typography variant="h5">Here are our recommendations:</Typography>
+
+      {/* Render list of recommended recipes */}
       {recommendations.map((key) => {
         return (
-          <div
-            key={key.name}
-            style={{
-              borderBottom: "2px solid",
-              boxShadow: "0 -10px 10px -11px",
-            }}
-          >
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <div>
-                  <Typography
-                    variant="h5"
-                    component="h5"
-                    style={{ textAlign: "center", color: "#022950" }}
-                  >
-                    {key.name.charAt(0).toUpperCase() + key.name.slice(1)}
-                  </Typography>
-                </div>
+          <Accordion key={key._id}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+              <Typography>{key.name.charAt(0).toUpperCase() + key.name.slice(1)}</Typography>
+            </AccordionSummary>
 
-                <div className="cart">
-                  <div className="container">
-                    <div className="toggle-switch">
-                      <input
-                        type="checkbox"
-                        className="checkbox"
-                        name={key.name}
-                        id={key.name}
-                        onChange={(e) => handleChange(e, key.name, key.ingredients)}
-                      />
-                      {/* <label className="label" htmlFor={key.name}>
-                        <span className="inner" />
-                      </label> */}
-                    </div>
-                  </div>
-                </div>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Button 
-                  variant="contained" 
-                  color="primary" 
-                  sx={{ mr: 2 }}
-                  onClick={() => handlePostRequest(key)}
-                >
-                  {savedRecipe.includes(key._id) ? "Remove from History" : "Add to History"}
-                </Button>
-                <Card className="card-style">
-                  <div sx={{ display: "flex" }}>                  
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: "50%",
-                        float: "left",
-                      }}
-                    >
-                      <CardContent sx={{ flex: "1 0 auto" }}>
-                        <Typography component="div" variant="h6">
-                          Cooking time
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          {key.minutes + " mins"}
-                        </Typography>
-                        <Typography component="div" variant="h6">
-                          Ingredients
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          {key.ingredients.join(", ")}
-                        </Typography>
-                      </CardContent>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: "50%",
-                      }}
-                    >
-                      <CardContent sx={{ flex: "1 0 auto" }}>
-                        <Typography component="div" variant="h6">
-                          Recipe
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          {key.steps.map((data, index) => {
-                            return <li key={index}>{data}</li>;
-                          })}
-                        </Typography>
-                      </CardContent>
-                    </Box>
-                  </div>
-                </Card>
-              </AccordionDetails>
-            </Accordion>
-          </div>
+            <AccordionDetails>
+              {/* Toggle switch for adding/removing recipes to/from cart */}
+              <input type="checkbox" onChange={(e) => handleChange(e, key.name, key.ingredients)} />
+
+              {/* Button to save or remove recipe from history */}
+              <Button onClick={() => handlePostRequest(key)}>
+                {savedRecipe.includes(key._id) ? "Remove from History" : "Add to History"}
+              </Button>
+
+              {/* Display cooking time */}
+              <Typography variant="body2">Cooking time: {key.minutes} mins</Typography>
+
+              {/* Display ingredients */}
+              <Typography variant="body2">Ingredients: {key.ingredients.join(", ")}</Typography>
+
+              {/* Display steps */}
+              <Typography variant="body2">Steps:</Typography>
+              {key.steps.map((data, index) => (
+                <Typography key={index} variant="body2">{data}</Typography>
+              ))}
+            </AccordionDetails>
+          </Accordion>
         );
       })}
-      {/* <Box
-        textAlign="center"
-        style={{
-          paddingLeft: "10px",
-          paddingRight: "215px",
-          paddingTop: "40px",
-        }}
-      >
-        <Button className="button-style" onClick={proceedToOrder}>
-          Proceed
-        </Button>
-      </Box> */}
-    </React.Fragment>
+
+      {/* Button to proceed with selected recipes in cart */}
+      <Button variant="contained" color="primary" onClick={() => navigate("/cart")}>
+        Proceed with Selected Recipes
+      </Button>
+    </Box>
   );
 };
 
