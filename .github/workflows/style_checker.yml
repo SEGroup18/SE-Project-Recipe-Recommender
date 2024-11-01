@@ -17,10 +17,13 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Install Prettier
-        run: npm install -g prettier
-
-      - name: Prettify code
-        uses: creyD/prettier_action@v4.0
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          prettier_options: --write **/*.{js,md}
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install --save-dev prettier
+
+      - name: Run Prettier
+        run: npx prettier --write "**/*.{js,md}"
