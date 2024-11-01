@@ -23,6 +23,13 @@
 
 [![Watch the video](https://img.youtube.com/vi/0IJG0-tvfvI/maxresdefault.jpg)](https://youtu.be/0IJG0-tvfvI)
 
+## Motivation
+
+The **Recipe Recommendation System** was developed to simplify and enhance the cooking and meal planning experience for users by providing easy access to a variety of recipes based on personal preferences, dietary needs, and ingredient availability. Today’s busy lifestyles leave limited time for planning nutritious, enjoyable meals, and many people feel overwhelmed by the vast range of recipes available online. Our project aims to bridge this gap by offering personalized recipe recommendations that streamline the decision-making process and support healthier food choices.
+
+By allowing users to select preferred categories, filter recipes by ingredients, and even refine searches based on nutritional needs, our platform makes it easy to discover dishes that suit any taste, occasion, or dietary restriction. Furthermore, by providing the option to place ingredient orders, we remove logistical barriers, making it more convenient to try new recipes. We hope this system will encourage more home cooking, inspire culinary exploration, and promote balanced eating.
+
+
 ## What is Recipe Recommendation System?
 
 Recipe Recommendation System helps users to select their favorite food category and recommends recipes based on it. The users are then able to view the recipe and the ingredients required, and place an order for those ingredients.
