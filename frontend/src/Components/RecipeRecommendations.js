@@ -29,17 +29,11 @@ const RecipeRecommendations = () => {
 
   const navigate = useNavigate();
 
-  const [savedRecipe, setSavedRecipe] = useState([]);
   const user = useRef(JSON.parse(localStorage.getItem("user")));
-
-  useEffect(() => { 
-    console.log(user.current.history);
-    setSavedRecipe(user.current.history);
-  }, []);
+  const [savedRecipe, setSavedRecipe] = useState(JSON.parse(localStorage.getItem("savedRecipe")) || user.current.history);
 
   const handlePostRequest = (recipe) => {
     const isPresent = savedRecipe.includes(recipe._id);
-    console.log(savedRecipe, isPresent, recipe._id, user.current._id);
     let modifiedRecipe = [];
     
     if (isPresent) {

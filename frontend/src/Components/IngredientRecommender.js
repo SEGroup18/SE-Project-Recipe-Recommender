@@ -53,6 +53,29 @@ export const IngredientRecommender = () => {
   // Calculate total pages
   const totalPages = Math.ceil(recipes.length / itemsPerPage);
 
+  const user = useRef(JSON.parse(localStorage.getItem("user")));  
+  const [savedRecipe, setSavedRecipe] = useState(JSON.parse(localStorage.getItem("savedRecipe")) || user.current.history);
+
+  const handlePostRequest = (recipe) => {
+    const isPresent = savedRecipe.includes(recipe._id);
+    let modifiedRecipe = [];
+    
+    if (isPresent) {
+      modifiedRecipe = savedRecipe.filter(id => id !== recipe._id);
+    }else{
+      modifiedRecipe = [...savedRecipe, recipe._id];      
+    }
+    server.post('/recipe/history', {history: modifiedRecipe, userId: user.current._id})
+        .then(response => {
+          console.log('Recipe saved successfully:', response.data);
+        })
+        .catch(error => {
+          console.error('Error saving recipe:', error);
+        });  
+    localStorage.setItem("savedRecipe", JSON.stringify(modifiedRecipe));
+    setSavedRecipe(modifiedRecipe);
+  };
+
   return (
     <Box sx={{ mt: 4, mx: 2 }}>
       <Typography variant="h5" align="center" sx={{ mb: 2 }}>
@@ -89,7 +112,7 @@ export const IngredientRecommender = () => {
       <Grid container spacing={2}>
         {currentRecipes.map((recipe, index) => (
           <Grid item xs={12} sm={4} key={index}>
-            <Recipe recipe={recipe} />
+            <Recipe recipe={recipe} handlePostRequest={handlePostRequest} savedRecipe={savedRecipe}/>
           </Grid>
         ))}
       </Grid>
@@ -106,36 +129,7 @@ export const IngredientRecommender = () => {
   );
 };
 
-const Recipe = ({ recipe }) => {
-
-  const [savedRecipe, setSavedRecipe] = useState([]);
-  const user = useRef(JSON.parse(localStorage.getItem("user")));
-
-  useEffect(() => { 
-    console.log(user.current.history);
-    setSavedRecipe(user.current.history);
-  }, []);
-
-  const handlePostRequest = (recipe) => {
-    const isPresent = savedRecipe.includes(recipe._id);
-    console.log(savedRecipe, isPresent, recipe._id, user.current._id);
-    let modifiedRecipe = [];
-    
-    if (isPresent) {
-      modifiedRecipe = savedRecipe.filter(id => id !== recipe._id);
-    }else{
-      modifiedRecipe = [...savedRecipe, recipe._id];      
-    }
-    server.post('/recipe/history', {history: modifiedRecipe, userId: user.current._id})
-        .then(response => {
-          console.log('Recipe saved successfully:', response.data);
-        })
-        .catch(error => {
-          console.error('Error saving recipe:', error);
-        });  
-    localStorage.setItem("savedRecipe", JSON.stringify(modifiedRecipe));
-    setSavedRecipe(modifiedRecipe);
-  };
+const Recipe = ({ recipe, handlePostRequest, savedRecipe }) => {
 
   return (
     <Box
