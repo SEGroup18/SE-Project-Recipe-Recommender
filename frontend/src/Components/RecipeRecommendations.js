@@ -37,7 +37,7 @@ const RecipeRecommendations = () => {
     let modifiedRecipe = [];
     
     if (isPresent) {
-      modifiedRecipe = savedRecipe.filter(id => id !== recipe._id);
+      modifiedRecipe = savedRecipe.filter(recipeId => recipeId !== recipe._id);
     }else{
       modifiedRecipe = [...savedRecipe, recipe._id];      
     }

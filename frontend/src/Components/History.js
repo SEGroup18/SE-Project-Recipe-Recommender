@@ -34,7 +34,7 @@
 	}, []);
 
 	const handlePostRequest = (recipe) => {
-		let modifiedRecipe = savedRecipe.filter(id => id !== recipe._id);
+		let modifiedRecipe = savedRecipe.filter(recipeId => recipeId !== recipe._id);
 		server.post('/recipe/history', {history: modifiedRecipe, userId: user.current._id})
 			.then(response => {
 				console.log('Recipe saved successfully:', response.data); 
