@@ -1,68 +1,30 @@
 import React from "react";
+import nye from "../imgs/nye.png";
+import winter from "../imgs/winter.png";
+import val from "../imgs/val.png";
+import ss from "../imgs/ss.png";
+import easter from "../imgs/easter.png";
+import bbq from "../imgs/bbq.png";
+import smoothie from "../imgs/smoothie.png";
+import autumn from "../imgs/autumn.png";
+import haloween from "../imgs/haloween.png";
+import pumpkin from "../imgs/pumpkin.png";
+import christmas from "../imgs/christmas.png";
 
 export const Seasonal = () => {
   // Data for seasonal categories
   const seasonalCategories = [
-    {
-      id: 1,
-      name: "Pumpkin Specials",
-      image: "pumpkin-specials.jpg", // Replace with actual image paths
-      available: "October - November",
-    },
-    {
-      id: 2,
-      name: "Christmas Treats",
-      image: "christmas-treats.jpg",
-      available: "December",
-    },
-    {
-      id: 3,
-      name: "Winter Favorites",
-      image: "winter-favorites.jpg",
-      available: "December - February",
-    },
-    {
-      id: 4,
-      name: "Spring Salads",
-      image: "spring-salads.jpg",
-      available: "March - May",
-    },
-    {
-      id: 5,
-      name: "Summer Smoothies",
-      image: "summer-smoothies.jpg",
-      available: "June - August",
-    },
-    {
-      id: 6,
-      name: "BBQ Specials",
-      image: "bbq-specials.jpg",
-      available: "May - September",
-    },
-    {
-      id: 7,
-      name: "Halloween Treats",
-      image: "halloween-treats.jpg",
-      available: "October",
-    },
-    {
-      id: 8,
-      name: "Autumn Comforts",
-      image: "autumn-comforts.jpg",
-      available: "September - November",
-    },
-    {
-      id: 9,
-      name: "Valentine's Day Delights",
-      image: "valentine-delights.jpg",
-      available: "February",
-    },
-    {
-      id: 10,
-      name: "Easter Goodies",
-      image: "easter-goodies.jpg",
-      available: "April",
-    },
+    { id: 1, name: "New Year Feast", image: nye, available: "January" },
+    { id: 2, name: "Winter Favorites", image: winter, available: "December - February" },
+    { id: 3, name: "Valentine's Day Delights", image: val, available: "February" },
+    { id: 4, name: "Spring Salads", image: ss, available: "March - May" },
+    { id: 5, name: "Easter Goodies", image: easter, available: "April" },
+    { id: 6, name: "BBQ Specials", image: bbq, available: "May - September" },
+    { id: 7, name: "Summer Smoothies", image: smoothie, available: "June - August" },
+    { id: 8, name: "Autumn Comforts", image: autumn, available: "September - November" },
+    { id: 9, name: "Halloween Treats", image: haloween, available: "October" },
+    { id: 10, name: "Pumpkin Specials", image: pumpkin, available: "October - November" },
+    { id: 11, name: "Christmas Treats", image: christmas, available: "December" },    
   ];
 
   return (
@@ -83,12 +45,12 @@ export const Seasonal = () => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gridTemplateColumns: "repeat(3, 1fr)", // 3 items per row
           gap: "20px",
           justifyContent: "center",
         }}
       >
-        {seasonalCategories.map((category) => (
+        {seasonalCategories.map((category, index) => (
           <div
             key={category.id}
             style={{
@@ -98,18 +60,21 @@ export const Seasonal = () => {
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
               overflow: "hidden",
               transition: "transform 0.3s",
+              // Add specific width for each item if needed
+              height: "350px",
+              width: index < 9 ? "100%" : "100%", // Ensure last item is aligned correctly
             }}
           >
             <img
-              src={`/images/${category.image}`} // Replace `/images/` with your actual image path
+              src={category.image} // Replace `/images/` with your actual image path
               alt={category.name}
               style={{
                 width: "100%",
-                height: "150px",
+                height: "250px",
                 objectFit: "cover",
               }}
             />
-            <div style={{ padding: "15px" }}>
+            <div style={{ padding: "10px" }}>
               <h2 style={{ fontSize: "1.5rem", margin: "10px 0" }}>
                 {category.name}
               </h2>
@@ -123,5 +88,3 @@ export const Seasonal = () => {
     </div>
   );
 };
-
-
