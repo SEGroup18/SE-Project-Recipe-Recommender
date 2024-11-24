@@ -13,7 +13,7 @@ import Order from "./Components/Order";
 import { IngredientRecommender } from "./Components/IngredientRecommender";
 import { DietPlan } from "./Components/DietPlan";
 import { History } from "./Components/History";
-
+import { Seasonal } from "./Components/Seasonal";
 function App() {
   const [
     {
@@ -63,6 +63,10 @@ function App() {
           <Route
             path="dietPlan"
             element={<DietPlan />}
+          />
+          <Route
+            path="seasonal"
+            element={<Seasonal />}
           />
         </Route>
       </Routes>
