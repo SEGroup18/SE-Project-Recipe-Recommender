@@ -17,9 +17,9 @@ export const Seasonal = () => {
   const navigate = useNavigate();
 
   const seasonalCategories = [
-    { id: 1, name: "New Year Feast", image: nye, available: "January" },
+    { id: 1, name: "New Year Feast", image: nye, available: "January", path: "/newYearCategory" },
     { id: 2, name: "Winter Favorites", image: winter, available: "December - February", path: "/winter" },
-    { id: 3, name: "Valentine's Day Delights", image: val, available: "February" },
+    { id: 3, name: "Valentine's Day Delights", image: val, available: "February", path: "/valentineCategory" },
     { id: 4, name: "Spring Salads", image: ss, available: "March - May" },
     { id: 5, name: "Easter Goodies", image: easter, available: "April" },
     { id: 6, name: "BBQ Specials", image: bbq, available: "May - September" },
