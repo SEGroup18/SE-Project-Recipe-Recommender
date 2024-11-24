@@ -18,7 +18,11 @@ export const IngredientRecommender = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // Set the number of recipes to display per page
+  const [showIngredientsGrid, setShowIngredientsGrid] = useState(true); // Controls visibility of ingredient grid
+  const [selectedCategory, setSelectedCategory] = useState(""); // Holds the selected category
+  const itemsPerPage = 6;
+
+  const categories = ["Dairy", "Meat", "Vegetables", "Fruits", "Spices"]; // Example categories
 
   const handleSearch = () => {
     server
@@ -28,29 +32,45 @@ export const IngredientRecommender = () => {
       .then((data) => {
         setRecipes(data.data);
         setCurrentPage(1); // Reset to first page on new search
+        setShowIngredientsGrid(false); // Hide ingredients grid after search
       })
       .catch((err) => alert(err.response.data.error));
   };
 
   useEffect(() => {
-    server
-      .get("/recipe/ingredients")
-      .then((data) => {
-        setOptions(
-          data.data.map((r) => {
-            return { title: r };
-          })
-        );
-      })
-      .catch((err) => alert(err.response.data.error));
+    setOptions([
+      { title: "Milk", category: "Dairy", imageUrl: "https://nutritionsource.hsph.harvard.edu/wp-content/uploads/2024/11/AdobeStock_354060824-1024x683.jpeg" },
+      { title: "Cheese", category: "Dairy", imageUrl: "https://i0.wp.com/images-prod.healthline.com/hlcmsresource/images/AN_images/healthiest-cheese-1296x728-swiss.jpg?w=1155&h=1528" },
+      { title: "Butter", category: "Dairy", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSy7hz6vFjHDwej1GZhgPjnkX-lSHXAbGCv_g&s" },
+      { title: "Yogurt", category: "Dairy", imageUrl: "https://www.happysimpleliving.com/wp-content/uploads/2024/02/homemade-greek-yogurt-featured.jpg" },
+      { title: "Eggs", category: "Dairy", imageUrl: "https://www.simplyrecipes.com/thmb/zsQvDavpqD2PtIO-7W6nBWVHCe4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Simply-Recipes-Hard-Boiled-Eggs-LEAD-03-42506773297f4a15920c46628d534d67.jpg"},
+      { title: "Chicken", category: "Meat", imageUrl: "https://assets.epicurious.com/photos/62f16ed5fe4be95d5a460eed/1:1/w_2560%2Cc_limit/RoastChicken_RECIPE_080420_37993.jpg" },
+      { title: "Beef", category: "Meat", imageUrl: "https://t3.ftcdn.net/jpg/06/90/51/98/360_F_690519885_jgpfFRbq3x1MxZLBePxyHpXeiWo9Oiow.jpg" },
+      { title: "Pork", category: "Meat", imageUrl: "https://www.allrecipes.com/thmb/mQHYg_nV46dYhUD1Hx-vdGWarZk=/0x512/filters:no_upscale():max_bytes(150000):strip_icc()/14726-grilled-pork-tenderloin-beauty-3x4-f4efabb5032f464dae47fe4ee57690da.jpg" },
+      { title: "Lamb", category: "Meat", imageUrl: "https://images.getrecipekit.com/v1615995124_RedRubbedBabyLambChopsPg101_xyzuwo.jpg?aspect_ratio=1:1&quality=90&"},
+      { title: "Carrot", category: "Vegetables", imageUrl: "https://www.hhs1.com/hubfs/carrots%20on%20wood-1.jpg" },
+      { title: "Broccoli", category: "Vegetables", imageUrl: "https://www.health.com/thmb/Rmc7904DESkPtLdsuVB49yGBZNo=/3950x0/filters:no_upscale():max_bytes(150000):strip_icc()/Health-Stocksy_txp48915e00jrw300_Medium_5965806-1b7dc08bfcbc4b748e5f1f27f67894a5.jpg" },
+      { title: "Spinach", category: "Vegetables", imageUrl: "https://www.thespruceeats.com/thmb/Wpdr8OgU89mQDImdVsH96i_-dd4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/what-is-spinach-4783497-hero-07-4a4e988cb48b4973a258d1cc44909780.jpg" },
+      { title: "Tomato", category: "Vegetables", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsdBhTMSiXhYaTInFGJ4kdEeujnWjfqo8WqA&s" },
+      { title: "Cucumber", category: "Vegetables", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT19UUTLodCwKT1sEjgfdbWn8WLfiJ3D2d4Q&s" },
+      { title: "Apple", category: "Fruits", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAu2mZ830SD2185RCt26uImF95C7pXFhwXMQ&s"},
+      { title: "Banana", category: "Fruits", imageUrl:"https://nutritionsource.hsph.harvard.edu/wp-content/uploads/2018/08/bananas-1354785_1920-1024x683.jpg"},
+      { title: "Grapes", category: "Fruits",imageUrl:"https://hips.hearstapps.com/hmg-prod/images/766/grapes-main-1506688521.jpg?crop=0.848xw:1xh;center,top&resize=1200:*"},
+      { title: "Orange", category: "Fruits",imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Oranges_-_whole-halved-segment.jpg/640px-Oranges_-_whole-halved-segment.jpg" },
+      { title: "Salt", category: "Spices", imageUrl: ""},
+      { title: "Pepper", category: "Spices",imageUrl: "" },
+      { title: "Cumin", category: "Spices", imageUrl: ""},
+      { title: "Turmeric", category: "Spices", imageUrl: ""},
+    ]);
   }, []);
 
-  // Calculate the current recipes to display
+  // Filter options based on the selected category
+  const filteredOptions = options.filter(option => option.category === selectedCategory);
+
+  // Pagination logic
   const indexOfLastRecipe = currentPage * itemsPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - itemsPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-
-  // Calculate total pages
   const totalPages = Math.ceil(recipes.length / itemsPerPage);
 
   const user = useRef(JSON.parse(localStorage.getItem("user")));  
@@ -62,7 +82,7 @@ export const IngredientRecommender = () => {
     
     if (isPresent) {
       modifiedRecipe = savedRecipe.filter(id => id !== recipe._id);
-    }else{
+    } else {
       modifiedRecipe = [...savedRecipe, recipe._id];      
     }
     server.post('/recipe/history', {history: modifiedRecipe, userId: user.current._id})
@@ -108,14 +128,60 @@ export const IngredientRecommender = () => {
           Search Recipes
         </Button>
       </Box>
-      <br />
-      <Grid container spacing={2}>
-        {currentRecipes.map((recipe, index) => (
-          <Grid item xs={12} sm={4} key={index}>
-            <Recipe recipe={recipe} handlePostRequest={handlePostRequest} savedRecipe={savedRecipe}/>
+      
+      {/* Category Selection: Show categories like Dairy, Meat, etc. */}
+      {showIngredientsGrid && (
+        <Box sx={{ mt: 3 }}>
+          <Typography variant="h6" align="center" sx={{ mb: 2 }}>
+            Select a Category:
+          </Typography>
+          <Grid container spacing={2} justifyContent="center">
+            {categories.map((category, index) => (
+              <Grid item key={index}>
+                <Button 
+                  variant="outlined" 
+                  onClick={() => setSelectedCategory(category)}
+                  sx={{ padding: "8px 16px", minWidth: "120px" }}
+                >
+                  {category}
+                </Button>
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
+        </Box>
+      )}
+
+      {/* Ingredients Grid: Show grid of ingredients based on selected category */}
+      {showIngredientsGrid && selectedCategory && (
+        <Grid container spacing={2} sx={{ mt: 2 }}>
+          {filteredOptions.map((ingredient, index) => (
+            <Grid item xs={12} sm={4} md={3} key={index}>
+              <Box sx={{ textAlign: "center" }}>
+              <img 
+                src={ingredient.imageUrl} 
+                alt={ingredient.title} 
+                style={{ width: "100%", height: "auto", marginBottom: "8px", borderRadius: "8px" }} 
+              />
+
+                <Typography>{ingredient.title}</Typography>
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+
+      {/* Recipe Results displayed after search */}
+      {!showIngredientsGrid && (
+        <Grid container spacing={2}>
+          {currentRecipes.map((recipe, index) => (
+            <Grid item xs={12} sm={4} key={index}>
+              <Recipe recipe={recipe} handlePostRequest={handlePostRequest} savedRecipe={savedRecipe}/>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+
+      {/* Pagination */}
       <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
         <Pagination
           count={totalPages}
@@ -130,7 +196,6 @@ export const IngredientRecommender = () => {
 };
 
 const Recipe = ({ recipe, handlePostRequest, savedRecipe }) => {
-
   return (
     <Box
       sx={{
