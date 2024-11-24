@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import nye from "../imgs/nye.png";
 import winter from "../imgs/winter.png";
 import val from "../imgs/val.png";
@@ -12,10 +14,11 @@ import pumpkin from "../imgs/pumpkin.png";
 import christmas from "../imgs/christmas.png";
 
 export const Seasonal = () => {
-  // Data for seasonal categories
+  const navigate = useNavigate();
+
   const seasonalCategories = [
     { id: 1, name: "New Year Feast", image: nye, available: "January" },
-    { id: 2, name: "Winter Favorites", image: winter, available: "December - February" },
+    { id: 2, name: "Winter Favorites", image: winter, available: "December - February", path: "/winter" },
     { id: 3, name: "Valentine's Day Delights", image: val, available: "February" },
     { id: 4, name: "Spring Salads", image: ss, available: "March - May" },
     { id: 5, name: "Easter Goodies", image: easter, available: "April" },
@@ -24,7 +27,7 @@ export const Seasonal = () => {
     { id: 8, name: "Autumn Comforts", image: autumn, available: "September - November" },
     { id: 9, name: "Halloween Treats", image: haloween, available: "October" },
     { id: 10, name: "Pumpkin Specials", image: pumpkin, available: "October - November" },
-    { id: 11, name: "Christmas Treats", image: christmas, available: "December" },    
+    { id: 11, name: "Christmas Treats", image: christmas, available: "December" },
   ];
 
   return (
@@ -46,13 +49,14 @@ export const Seasonal = () => {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)", // 3 items per row
-          gap: "20px",
+          gap: "40px",
           justifyContent: "center",
         }}
       >
-        {seasonalCategories.map((category, index) => (
+        {seasonalCategories.map((category) => (
           <div
-            key={category.id}
+            key={category.id} // Correct key placement
+            onClick={() => category.path && navigate(category.path)} // Only navigate if path exists
             style={{
               backgroundColor: "white",
               color: "#022950",
@@ -60,13 +64,14 @@ export const Seasonal = () => {
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
               overflow: "hidden",
               transition: "transform 0.3s",
-              // Add specific width for each item if needed
               height: "350px",
-              width: index < 9 ? "100%" : "100%", // Ensure last item is aligned correctly
+              cursor: "pointer", // Indicates the item is clickable
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.15)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
           >
             <img
-              src={category.image} // Replace `/images/` with your actual image path
+              src={category.image}
               alt={category.name}
               style={{
                 width: "100%",
@@ -78,7 +83,7 @@ export const Seasonal = () => {
               <h2 style={{ fontSize: "1.5rem", margin: "10px 0" }}>
                 {category.name}
               </h2>
-              <p style={{ fontSize: "1rem", fontWeight: "bold" }}>
+              <p style={{ fontSize: "12px", fontWeight: "inherit" }}>
                 {category.available}
               </p>
             </div>

@@ -14,6 +14,8 @@ import { IngredientRecommender } from "./Components/IngredientRecommender";
 import { DietPlan } from "./Components/DietPlan";
 import { History } from "./Components/History";
 import { Seasonal } from "./Components/Seasonal";
+import { Winter } from './Components/Winter';
+
 function App() {
   const [
     {
@@ -67,6 +69,10 @@ function App() {
           <Route
             path="seasonal"
             element={<Seasonal />}
+          />
+          <Route
+            path="winter"
+            element={<Winter />}
           />
         </Route>
       </Routes>
