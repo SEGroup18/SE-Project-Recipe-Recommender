@@ -1,149 +1,184 @@
-	import React, { useRef, useEffect, useState } from "react";
-	import {
-	Box,
-	Typography,
-	Chip,
-	List,
-	ListItem,
-	Grid,
-	Button,
-	} from "@mui/material";
-	import { server } from "../utils";
+import React, { useRef, useEffect, useState } from "react";
+import {
+  Box,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  List,
+  ListItem,
+  Chip,
+  Grid,
+  Button,
+  Divider,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { server } from "../utils";
 
-	export const History = () => {
+export const History = () => {
+  const [groupedRecipes, setGroupedRecipes] = useState([]);
+  const user = useRef(JSON.parse(localStorage.getItem("user")));
+  const [savedRecipe, setSavedRecipe] = useState(
+    JSON.parse(localStorage.getItem("savedRecipe")) || user.current.history
+  );
 
-	const [recipes, setRecipes] = useState([]);
-	const user = useRef(JSON.parse(localStorage.getItem("user")));
-	const [savedRecipe, setSavedRecipe] = useState(JSON.parse(localStorage.getItem("savedRecipe")) || user.current.history)
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      const recipeDetails = {};
 
-	useEffect(() => { 
-	const fetchRecipes = async () => {
-		const fetchedRecipes = [];	
-		for (const recipeId of savedRecipe) {
-			try {
-			const response = await server.get(`/recipe/${recipeId}`);
-			fetchedRecipes.push(response.data);
-			} catch (error) {
-			console.error(`Error fetching recipe with id ${recipeId}:`, error);
-			}
-		}	
-		setRecipes(fetchedRecipes);
-		};
-	
-	fetchRecipes();	
-	}, []);
+      for (const { recipeId } of savedRecipe) {
+		console.log(recipeDetails, recipeId);
+        try {
+          if (!recipeDetails[recipeId]) {
+            const response = await server.get(`/recipe/${recipeId}`);
+            recipeDetails[recipeId] = response.data;
+          }
+        } catch (error) {
+          console.error(`Error fetching recipe with id ${recipeId}:`, error);
+        }
+      }
 
-	const handlePostRequest = (recipe) => {
-		let modifiedRecipe = savedRecipe.filter(id => id !== recipe._id);
-		server.post('/recipe/history', {history: modifiedRecipe, userId: user.current._id})
-			.then(response => {
-				console.log('Recipe saved successfully:', response.data); 
-				localStorage.setItem("savedRecipe", JSON.stringify(modifiedRecipe));
-				setSavedRecipe(modifiedRecipe);
-				setRecipes(recipes.filter(r => r._id !== recipe._id));
-			})
-			.catch(error => {
-				console.error('Error saving recipe:', error);
-			}); 
-	};
+      const groupedByDate = savedRecipe.reduce((acc, { recipeId, timestamp }) => {
+        const date = new Date(timestamp).toLocaleDateString();
+        if (!acc[date]) acc[date] = { recipes: [], totalCalories: 0 };
 
-	return (
-	<div>
-	{recipes.map((recipe, index) => (
-	<Grid item xs={12} sm={4} key={index}>              
-		<Box
-			sx={{
-			border: "1px solid #ccc",
-			borderRadius: "8px",
-			padding: 2,
-			marginBottom: 2,
-			boxShadow: 2,
-			}}
-		>
-			<Grid container alignItems="center" justifyContent="space-between">
-			<Grid item xs={12} sm={8}>
-				<Typography variant="h5" sx={{ fontWeight: "bold" }}>
-				{recipe.name}
-				</Typography>
-			</Grid>
-			<Grid item xs={12} sm={4}>
-				<Box
-				sx={{
-					display: "flex",
-					flexWrap: "wrap",
-					justifyContent: "flex-end",
-				}}
-				>
-				{recipe.tags.map((tag, index) => (
-					<Chip
-					key={index}
-					label={tag}
-					variant="outlined"
-					color="primary"
-					sx={{
-						margin: "2px",
-						bgcolor: "#e3f2fd",
-						borderColor: "#2196f3",
-					}}
-					/>
-				))}
-				</Box>
-			</Grid>
-			</Grid>
+        const recipe = recipeDetails[recipeId];
+        if (recipe) {
+          acc[date].recipes.push(recipe);
 
-			<Typography variant="body1" sx={{ marginY: 1 }}>
-			{recipe.description}
-			</Typography>
-			{recipe.minutes && (
-			<Typography variant="body2" color="text.secondary">
-				Cooking Time: {recipe.minutes} minutes
-			</Typography>
-			)}
+          const calories =
+            recipe.nutrients?.calories
+              ? parseInt(recipe.nutrients.calories)
+              : 0;
 
-			<Grid container spacing={2} sx={{ marginY: 1 }}>
-			<Grid item xs={12} sm={8}>
-				<Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-				Steps:
-				</Typography>
-				<List dense sx={{ padding: 0 }}>
-				{recipe.steps.map((step, index) => (
-					<ListItem key={index} sx={{ padding: "4px 0" }}>
-					<Typography variant="body2">{step}</Typography>
-					</ListItem>
-				))}
-				</List>
-			</Grid>
+          acc[date].totalCalories += calories;
+        }
+        return acc;
+      }, {});
 
-			<Grid item xs={12} sm={4}>
-				<Box>
-				<Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-					Ingredients:
-				</Typography>
-				<List dense sx={{ padding: 0 }}>
-					{recipe.ingredients.map((ingredient, index) => (
-					<ListItem key={index} sx={{ padding: "4px 0" }}>
-						<Typography variant="body2">{ingredient}</Typography>
-					</ListItem>
-					))}
-				</List>
-				<Button 
-					variant="contained" 
-					color="primary" 
-					sx={{ 
-						position: 'relative', 
-						bottom: 1, 
-						right: 1 
-					}}
-					  onClick={() => handlePostRequest(recipe)}
-					>
-					Remove from History
-					</Button>
-				</Box>
-			</Grid>
-			</Grid>
-		</Box>
-	</Grid>
-	))}
-	</div>
-	);
-	}
+      setGroupedRecipes(
+        Object.entries(groupedByDate).map(([date, data]) => ({
+          date,
+          recipes: data.recipes,
+          totalCalories: data.totalCalories,
+        }))
+      );
+    };
+
+    fetchRecipes();
+  }, [savedRecipe]);
+
+  const handleRemoveFromHistory = (recipe) => {
+    const modifiedRecipe = savedRecipe.filter(
+      (r) => r.recipeId !== recipe._id
+    );
+
+    server
+      .post("/recipe/history", { history: modifiedRecipe, userId: user.current._id })
+      .then((response) => {
+        console.log("Recipe removed successfully:", response.data);
+        localStorage.setItem("savedRecipe", JSON.stringify(modifiedRecipe));
+        setSavedRecipe(modifiedRecipe);
+
+        setGroupedRecipes((prevGroupedRecipes) =>
+          prevGroupedRecipes.map((group) => ({
+            ...group,
+            recipes: group.recipes.filter((r) => r._id !== recipe._id),
+            totalCalories:
+              group.totalCalories -
+              (recipe.nutrients?.calories?.$numberInt
+                ? parseInt(recipe.nutrients.calories.$numberInt)
+                : 0),
+          })).filter((group) => group.recipes.length > 0)
+        );
+      })
+      .catch((error) => {
+        console.error("Error removing recipe:", error);
+      });
+  };
+
+  return (
+    <Box sx={{ padding: "16px" }}>
+      <Typography variant="h4" gutterBottom>
+        Recipe History
+      </Typography>
+
+      {groupedRecipes.map(({ date, recipes, totalCalories }) => (
+        <Accordion key={date}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography variant="h6">
+              {date} - Total Calories: {totalCalories}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <List>
+              {recipes.map((recipe, index) => (
+                <React.Fragment key={recipe._id}>
+                  <ListItem>
+                    <Box sx={{ width: "100%" }}>
+                      <Typography variant="h5">{recipe.name}</Typography>
+                      <Typography variant="body1">{recipe.description}</Typography>
+                      <Typography variant="body1">
+                        Cooking Time: {recipe.minutes?.$numberInt || recipe.minutes} mins
+                      </Typography>
+                      <Typography variant="body1">Tags:</Typography>
+                      <Grid container spacing={1}>
+                        {recipe.tags.map((tag, index) => (
+                          <Grid item key={index}>
+                            <Chip label={tag} />
+                          </Grid>
+                        ))}
+                      </Grid>
+                      <Typography variant="body1" sx={{ marginTop: "8px" }}>
+                        Ingredients:
+                      </Typography>
+                      <List>
+                        {recipe.ingredients.map((ingredient, index) => (
+                          <ListItem key={index}>
+                            <Typography variant="body2">{ingredient}</Typography>
+                          </ListItem>
+                        ))}
+                      </List>
+                      <Typography variant="body1" sx={{ marginTop: "8px" }}>
+                        Recipe Steps:
+                      </Typography>
+                      <List>
+                        {recipe.steps.map((step, index) => (
+                          <ListItem key={index}>
+                            <Typography variant="body2">
+                              Step {index + 1}: {step}
+                            </Typography>
+                          </ListItem>
+                        ))}
+                      </List>
+
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        sx={{
+                          backgroundColor: "#1976d2",
+                          color: "#fff",
+                          "&:hover": {
+                            backgroundColor: "#115293",
+                          },
+                          marginTop: "16px",
+                        }}
+                        onClick={() => handleRemoveFromHistory(recipe)}
+                      >
+                        Remove from History
+                      </Button>
+                    </Box>
+                  </ListItem>
+
+                  {index !== recipes.length - 1 && (
+                    <Divider sx={{ marginY: "16px" }} />
+                  )}
+                </React.Fragment>
+              ))}
+            </List>
+          </AccordionDetails>
+        </Accordion>
+      ))}
+    </Box>
+  );
+};
