@@ -10,11 +10,11 @@ describe('Winter Component', () => {
   test('renders Winter Favorites header with icons', () => {
     const header = screen.getByText(/Winter Favorites/i);
     expect(header).toBeInTheDocument();
-    // expect(screen.getByRole('img')).toBeInTheDocument(); // Verifies if the icons are rendered
+    // expect(screen.getByRole('img')).toBeInTheDocument();
   });
 
   test('displays all 10 recipe items', () => {
-    const recipeItems = screen.getAllByText(/(Soup|Chocolate|Mac|Mushrooms|Chicken|Lentil|Casserole|Beef|Potatoes|Onion)/); // Check for a few unique words in each item
+    const recipeItems = screen.getAllByText(/(Soup|Chocolate|Mac|Mushrooms|Chicken|Lentil|Casserole|Beef|Potatoes|Onion)/);
     expect(recipeItems.length).toBe(10);
   });
 
