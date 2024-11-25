@@ -118,7 +118,7 @@ exports.addHistory = async (req, res) => {
     if (history) {
       user.history = history;
       await user.save();
-      await user.populate("history");
+      await user.populate("history.recipeId");
 
       return res.status(200).json({
         message: "Recipe saved successfully",
@@ -126,7 +126,7 @@ exports.addHistory = async (req, res) => {
         data: user.history,
       });
     } else {
-      await user.populate("history");
+      await user.populate("history.recipeId");
 
       return res.status(200).json({
         message: "List of saved recipes retrieved",
