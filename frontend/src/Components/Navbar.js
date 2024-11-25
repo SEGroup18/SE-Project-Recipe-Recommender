@@ -12,9 +12,10 @@ import {
 
 import { useStateValue } from "../StateProvider";
 import CreateIcon from "@mui/icons-material/Create";
-import VpnKeyIcon from "@mui/icons-material/VpnKey";
+import VpnKeyIcon from "@mui/icons-material/VpnKey"; 
 import EggIcon from "@mui/icons-material/Egg";
 import MonitorWeightIcon from '@mui/icons-material/MonitorWeight';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import BookIcon from '@mui/icons-material/Book';
 import { useNavigate } from "react-router-dom";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -58,6 +59,12 @@ const NavBar = () => {
       to: "/history",
       display: token,
     },
+    {
+      listIcon: <AutoAwesomeIcon style={{ color: "white" }} />,
+      listText: "Seasonal Bites",
+      to: "/seasonal",
+      display: token,
+    }
   ]
 
   return (

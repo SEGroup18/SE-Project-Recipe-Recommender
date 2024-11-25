@@ -13,6 +13,10 @@ import Order from "./Components/Order";
 import { IngredientRecommender } from "./Components/IngredientRecommender";
 import { DietPlan } from "./Components/DietPlan";
 import { History } from "./Components/History";
+import { Seasonal } from "./Components/Seasonal";
+import { Winter } from './Components/Winter';
+import { NewYearCategory } from "./Components/NewYearCategory";
+import {ValentineCategory} from "./Components/ValentineCategory";
 
 function App() {
   const [
@@ -63,6 +67,22 @@ function App() {
           <Route
             path="dietPlan"
             element={<DietPlan />}
+          />
+          <Route
+            path="seasonal"
+            element={<Seasonal />}
+          />
+          <Route
+            path="winter"
+            element={<Winter />}
+          />
+          <Route
+            path="newYearCategory"
+            element={<NewYearCategory />}
+          />
+          <Route
+            path="valentineCategory"
+            element={<ValentineCategory />}
           />
         </Route>
       </Routes>
