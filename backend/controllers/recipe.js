@@ -116,7 +116,7 @@ exports.addHistory = async (req, res) => {
     }
 
     if (history) {
-      user.history.push({ recipeId: history });
+      user.history = history;
       await user.save();
       await user.populate("history.recipeId");
 

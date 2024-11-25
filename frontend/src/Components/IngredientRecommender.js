@@ -57,14 +57,15 @@ export const IngredientRecommender = () => {
   const [savedRecipe, setSavedRecipe] = useState(JSON.parse(localStorage.getItem("savedRecipe")) || user.current.history);
 
   const handlePostRequest = (recipe) => {
-    const isPresent = savedRecipe.includes(recipe._id);
+    const isPresent = savedRecipe.some((rec) => rec.recipeId === recipe._id);
     let modifiedRecipe = [];
     
     if (isPresent) {
-      modifiedRecipe = savedRecipe.filter(recipeId => recipeId !== recipe._id);
+      modifiedRecipe = savedRecipe.filter((rec) => rec.recipeId !== recipe._id);
     }else{
-      modifiedRecipe = [...savedRecipe, recipe._id];      
+      modifiedRecipe = [...savedRecipe, {recipeId: recipe._id, timestamp: new Date()}];      
     }
+    console.log(modifiedRecipe);
     server.post('/recipe/history', {history: modifiedRecipe, userId: user.current._id})
         .then(response => {
           console.log('Recipe saved successfully:', response.data);
@@ -221,7 +222,8 @@ const Recipe = ({ recipe, handlePostRequest, savedRecipe }) => {
               }}
               onClick={() => handlePostRequest(recipe)}
             >
-              {savedRecipe.includes(recipe._id) ? "Remove from History" : "Add to History"}
+              {console.log(recipe._id, savedRecipe, savedRecipe.some((rec) => rec.recipeId === recipe._id))}
+              {savedRecipe.some((rec) => rec.recipeId === recipe._id) ? "Remove from History" : "Add to History"}
             </Button>
           </Box>
         </Grid>

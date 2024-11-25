@@ -33,13 +33,13 @@ const RecipeRecommendations = () => {
   const [savedRecipe, setSavedRecipe] = useState(JSON.parse(localStorage.getItem("savedRecipe")) || user.current.history);
 
   const handlePostRequest = (recipe) => {
-    const isPresent = savedRecipe.includes(recipe._id);
+    const isPresent = savedRecipe.some((rec) => rec.recipeId === recipe._id);
     let modifiedRecipe = [];
     
     if (isPresent) {
-      modifiedRecipe = savedRecipe.filter(recipeId => recipeId !== recipe._id);
+      modifiedRecipe = savedRecipe.filter((rec) => rec.recipeId !== recipe._id);
     }else{
-      modifiedRecipe = [...savedRecipe, recipe._id];      
+      modifiedRecipe = [...savedRecipe, {recipeId: recipe._id, timestamp: new Date()}];      
     }
     server.post('/recipe/history', {history: modifiedRecipe, userId: user.current._id})
         .then(response => {
@@ -111,7 +111,7 @@ const RecipeRecommendations = () => {
                   sx={{ mr: 2 }}
                   onClick={() => handlePostRequest(key)}
                 >
-                  {savedRecipe.includes(key._id) ? "Remove from History" : "Add to History"}
+                  {savedRecipe.some((recipe) => recipe.recipeId === key._id) ? "Remove from History" : "Add to History"}
                 </Button>
                 <Card className="card-style">
                   <div sx={{ display: "flex" }}>                  
