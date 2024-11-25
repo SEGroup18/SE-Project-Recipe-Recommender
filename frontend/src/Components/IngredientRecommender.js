@@ -18,11 +18,11 @@ export const IngredientRecommender = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [showIngredientsGrid, setShowIngredientsGrid] = useState(true); // Controls visibility of ingredient grid
-  const [selectedCategory, setSelectedCategory] = useState(""); // Holds the selected category
+  const [showIngredientsGrid, setShowIngredientsGrid] = useState(true); 
+  const [selectedCategory, setSelectedCategory] = useState("");
   const itemsPerPage = 6;
 
-  const categories = ["Dairy", "Meat", "Vegetables", "Fruits", "Spices"]; // Example categories
+  const categories = ["Dairy", "Meat", "Vegetables", "Fruits", "Spices"]; 
 
   const handleSearch = () => {
     server
@@ -31,8 +31,8 @@ export const IngredientRecommender = () => {
       })
       .then((data) => {
         setRecipes(data.data);
-        setCurrentPage(1); // Reset to first page on new search
-        setShowIngredientsGrid(false); // Hide ingredients grid after search
+        setCurrentPage(1);
+        setShowIngredientsGrid(false); 
       })
       .catch((err) => alert(err.response.data.error));
   };
@@ -64,10 +64,8 @@ export const IngredientRecommender = () => {
     ]);
   }, []);
 
-  // Filter options based on the selected category
-  const filteredOptions = options.filter(option => option.category === selectedCategory);
-
-  // Pagination logic
+ 
+  const filteredOptions = options.filter(option => option.category === selectedCategory); 
   const indexOfLastRecipe = currentPage * itemsPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - itemsPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
