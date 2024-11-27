@@ -13,6 +13,7 @@ import {
   Divider,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { jsPDF } from "jspdf";
 import { server } from "../utils";
 
 export const History = () => {
@@ -27,7 +28,6 @@ export const History = () => {
       const recipeDetails = {};
 
       for (const { recipeId } of savedRecipe) {
-		console.log(recipeDetails, recipeId);
         try {
           if (!recipeDetails[recipeId]) {
             const response = await server.get(`/recipe/${recipeId}`);
@@ -76,7 +76,6 @@ export const History = () => {
     server
       .post("/recipe/history", { history: modifiedRecipe, userId: user.current._id })
       .then((response) => {
-        console.log("Recipe removed successfully:", response.data);
         localStorage.setItem("savedRecipe", JSON.stringify(modifiedRecipe));
         setSavedRecipe(modifiedRecipe);
 
@@ -95,6 +94,32 @@ export const History = () => {
       .catch((error) => {
         console.error("Error removing recipe:", error);
       });
+  };
+
+  const handleDownloadRecipePDF = (recipe) => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(20);
+    doc.text(recipe.name, 10, 10);
+
+    doc.setFontSize(14);
+    doc.text("Description:", 10, 30);
+    doc.text(recipe.description || "No description provided", 10, 40);
+
+    doc.text("Cooking Time:", 10, 60);
+    doc.text(`${recipe.minutes?.$numberInt || recipe.minutes} mins`, 10, 70);
+
+    doc.text("Ingredients:", 10, 90);
+    recipe.ingredients.forEach((ingredient, index) => {
+      doc.text(`${index + 1}. ${ingredient}`, 10, 100 + index * 10);
+    });
+
+    doc.text("Steps:", 10, 130 + recipe.ingredients.length * 10);
+    recipe.steps.forEach((step, index) => {
+      doc.text(`${index + 1}. ${step}`, 10, 140 + recipe.ingredients.length * 10 + index * 10);
+    });
+
+    doc.save(`${recipe.name}.pdf`);
   };
 
   return (
@@ -166,6 +191,17 @@ export const History = () => {
                         onClick={() => handleRemoveFromHistory(recipe)}
                       >
                         Remove from History
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{
+                          marginLeft: "8px",
+                          marginTop: "16px",
+                        }}
+                        onClick={() => handleDownloadRecipePDF(recipe)}
+                      >
+                        Download as PDF
                       </Button>
                     </Box>
                   </ListItem>
