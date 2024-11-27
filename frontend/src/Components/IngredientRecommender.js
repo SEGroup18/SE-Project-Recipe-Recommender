@@ -18,11 +18,11 @@ export const IngredientRecommender = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [showIngredientsGrid, setShowIngredientsGrid] = useState(true);
+  const [showIngredientsGrid, setShowIngredientsGrid] = useState(true); 
   const [selectedCategory, setSelectedCategory] = useState("");
   const itemsPerPage = 6;
 
-  const categories = ["Dairy", "Meat", "Vegetables", "Fruits", "Spices"];
+  const categories = ["Dairy", "Meat", "Vegetables", "Fruits", "Spices"]; 
 
   const handleSearch = () => {
     server
@@ -32,7 +32,7 @@ export const IngredientRecommender = () => {
       .then((data) => {
         setRecipes(data.data);
         setCurrentPage(1);
-        setShowIngredientsGrid(false);
+        setShowIngredientsGrid(false); 
       })
       .catch((err) => alert(err.response.data.error));
   };
@@ -63,36 +63,33 @@ export const IngredientRecommender = () => {
       { title: "Turmeric", category: "Spices", imageUrl: ""},
     ]);
   }, []);
-
-  const filteredOptions = options.filter(option => option.category === selectedCategory);
+ 
+  const filteredOptions = options.filter(option => option.category === selectedCategory); 
   const indexOfLastRecipe = currentPage * itemsPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - itemsPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
   const totalPages = Math.ceil(recipes.length / itemsPerPage);
 
-  const user = useRef(JSON.parse(localStorage.getItem("user")));
-  const [savedRecipe, setSavedRecipe] = useState(
-    JSON.parse(localStorage.getItem("savedRecipe")) || user.current.history
-  );
+  const user = useRef(JSON.parse(localStorage.getItem("user")));  
+  const [savedRecipe, setSavedRecipe] = useState(JSON.parse(localStorage.getItem("savedRecipe")) || user.current.history);
 
   const handlePostRequest = (recipe) => {
-    const isPresent = savedRecipe.includes(recipe._id);
+    const isPresent = savedRecipe.some((rec) => rec.recipeId === recipe._id);
     let modifiedRecipe = [];
-
+    
     if (isPresent) {
-      modifiedRecipe = savedRecipe.filter(id => id !== recipe._id);
-    } else {
-      modifiedRecipe = [...savedRecipe, recipe._id];
+      modifiedRecipe = savedRecipe.filter((rec) => rec.recipeId !== recipe._id);
+    }else{
+      modifiedRecipe = [...savedRecipe, {recipeId: recipe._id, timestamp: new Date()}];      
     }
-
-    server.post('/recipe/history', { history: modifiedRecipe, userId: user.current._id })
-      .then(response => {
-        console.log('Recipe saved successfully:', response.data);
-      })
-      .catch(error => {
-        console.error('Error saving recipe:', error);
-      });
-
+    console.log(modifiedRecipe);
+    server.post('/recipe/history', {history: modifiedRecipe, userId: user.current._id})
+        .then(response => {
+          console.log('Recipe saved successfully:', response.data);
+        })
+        .catch(error => {
+          console.error('Error saving recipe:', error);
+        });  
     localStorage.setItem("savedRecipe", JSON.stringify(modifiedRecipe));
     setSavedRecipe(modifiedRecipe);
   };
@@ -103,7 +100,9 @@ export const IngredientRecommender = () => {
         Unsure what to create? Start by searching for ingredients, and discover
         all the delicious recipes you can make!
       </Typography>
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
         <Autocomplete
           multiple
           options={options}
@@ -121,12 +120,14 @@ export const IngredientRecommender = () => {
               sx={{ minWidth: "500px" }}
             />
           )}
+          renderOption={(props, option) => <li {...props}>{option.title}</li>}
         />
         <Button variant="contained" onClick={handleSearch} sx={{ ml: 2 }}>
           Search Recipes
         </Button>
       </Box>
-
+      
+      {/* Category Selection: Show categories like Dairy, Meat, etc. */}
       {showIngredientsGrid && (
         <Box sx={{ mt: 3 }}>
           <Typography variant="h6" align="center" sx={{ mb: 2 }}>
@@ -135,8 +136,8 @@ export const IngredientRecommender = () => {
           <Grid container spacing={2} justifyContent="center">
             {categories.map((category, index) => (
               <Grid item key={index}>
-                <Button
-                  variant="outlined"
+                <Button 
+                  variant="outlined" 
                   onClick={() => setSelectedCategory(category)}
                   sx={{ padding: "8px 16px", minWidth: "120px" }}
                 >
@@ -148,16 +149,18 @@ export const IngredientRecommender = () => {
         </Box>
       )}
 
+      {/* Ingredients Grid: Show grid of ingredients based on selected category */}
       {showIngredientsGrid && selectedCategory && (
         <Grid container spacing={2} sx={{ mt: 2 }}>
           {filteredOptions.map((ingredient, index) => (
             <Grid item xs={12} sm={4} md={3} key={index}>
               <Box sx={{ textAlign: "center" }}>
-                <img
-                  src={ingredient.imageUrl}
-                  alt={ingredient.title}
-                  style={{ width: "100%", height: "auto", marginBottom: "8px", borderRadius: "8px" }}
-                />
+              <img 
+                src={ingredient.imageUrl} 
+                alt={ingredient.title} 
+                style={{ width: "100%", height: "auto", marginBottom: "8px", borderRadius: "8px" }} 
+              />
+
                 <Typography>{ingredient.title}</Typography>
               </Box>
             </Grid>
@@ -165,16 +168,18 @@ export const IngredientRecommender = () => {
         </Grid>
       )}
 
+      {/* Recipe Results displayed after search */}
       {!showIngredientsGrid && (
         <Grid container spacing={2}>
           {currentRecipes.map((recipe, index) => (
             <Grid item xs={12} sm={4} key={index}>
-              <Recipe recipe={recipe} handlePostRequest={handlePostRequest} savedRecipe={savedRecipe} />
+              <Recipe recipe={recipe} handlePostRequest={handlePostRequest} savedRecipe={savedRecipe}/>
             </Grid>
           ))}
         </Grid>
       )}
 
+      {/* Pagination */}
       <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
         <Pagination
           count={totalPages}
@@ -189,8 +194,6 @@ export const IngredientRecommender = () => {
 };
 
 const Recipe = ({ recipe, handlePostRequest, savedRecipe }) => {
-  const isSaved = savedRecipe.includes(recipe._id);
-
   return (
     <Box
       sx={{
@@ -202,7 +205,6 @@ const Recipe = ({ recipe, handlePostRequest, savedRecipe }) => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: isSaved ? "#e6f7e6" : "#fff", // Highlight saved recipes
         boxSizing: 'border-box',
       }}
     >
@@ -213,21 +215,82 @@ const Recipe = ({ recipe, handlePostRequest, savedRecipe }) => {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-end" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "flex-end",
+            }}
+          >
             {recipe.tags.map((tag, index) => (
-              <Chip key={index} label={tag} variant="outlined" color="primary" sx={{ margin: "2px" }} />
+              <Chip
+                key={index}
+                label={tag}
+                variant="outlined"
+                color="primary"
+                sx={{
+                  margin: "2px",
+                  bgcolor: "#e3f2fd",
+                  borderColor: "#2196f3",
+                }}
+              />
             ))}
           </Box>
         </Grid>
       </Grid>
-      <Typography sx={{ mt: 2 }}>{recipe.description}</Typography>
-      <Button
-        variant="contained"
-        onClick={() => handlePostRequest(recipe)}
-        sx={{ mt: "auto", backgroundColor: isSaved ? "#76c7c0" : undefined }}
-      >
-        {isSaved ? "Unsave Recipe" : "Save Recipe"}
-      </Button>
+
+      <Typography variant="body1" sx={{ marginY: 1 }}>
+        {recipe.description}
+      </Typography>
+      {recipe.minutes && (
+        <Typography variant="body2" color="text.secondary">
+          Cooking Time: {recipe.minutes} minutes
+        </Typography>
+      )}
+
+      <Grid container spacing={2} sx={{ marginY: 1 }}>
+        <Grid item xs={12} sm={8}>
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+            Steps:
+          </Typography>
+          <List dense sx={{ padding: 0 }}>
+            {recipe.steps.map((step, index) => (
+              <ListItem key={index} sx={{ padding: "4px 0" }}>
+                <Typography variant="body2">{step}</Typography>
+              </ListItem>
+            ))}
+          </List>
+        </Grid>
+
+        <Grid item xs={12} sm={4}>
+          <Box>
+            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+              Ingredients:
+            </Typography>
+            <List dense sx={{ padding: 0 }}>
+              {recipe.ingredients.map((ingredient, index) => (
+                <ListItem key={index} sx={{ padding: "4px 0" }}>
+                  <Typography variant="body2">{ingredient}</Typography>
+                </ListItem>
+              ))}
+            </List>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              sx={{ 
+                position: 'relative', 
+                bottom: 1, 
+                right: 1 
+              }}
+              onClick={() => handlePostRequest(recipe)}
+            >
+              {savedRecipe.some((rec) => rec.recipeId === recipe._id) ? "Remove from History" : "Add to History"}
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 };
+
+export default IngredientRecommender;
