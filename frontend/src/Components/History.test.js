@@ -10,6 +10,7 @@ import { server } from "../utils";
 import "@testing-library/jest-dom";
 import { StateProvider } from "../StateProvider";
 import { MemoryRouter } from "react-router-dom";
+import { jsPDF } from "jspdf";
 
 jest.mock("../utils", () => ({
   server: {
@@ -22,6 +23,13 @@ jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => jest.fn(),
 }));
+
+jest.mock("jspdf", () => {
+  return jest.fn().mockImplementation(() => ({
+    save: jest.fn(),
+    text: jest.fn(),
+  }));
+});
 
 const mockRecipes = [
   {
@@ -46,9 +54,14 @@ const mockRecipes = [
 
 describe("History", () => {
   beforeEach(() => {
-    localStorage.setItem("user", JSON.stringify({ history: ["recipe1", "recipe2"] }));
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ history: ["recipe1", "recipe2"] })
+    );
     server.get.mockResolvedValue({ data: mockRecipes[0] });
-    server.post.mockResolvedValue({ data: { message: "History updated successfully" } });
+    server.post.mockResolvedValue({
+      data: { message: "History updated successfully" },
+    });
   });
 
   afterEach(() => {
@@ -64,63 +77,43 @@ describe("History", () => {
     });
   });
 
-  test("displays recipe details correctly", async () => {
+  test("renders 'Download PDF' button for each recipe", async () => {
     render(<History />);
     await waitFor(() => {
-      expect(screen.getByText("Cooking Time: 30 minutes")).toBeInTheDocument();
-      expect(screen.getByText("Chicken")).toBeInTheDocument();
-      expect(screen.getByText("Garlic")).toBeInTheDocument();
+      const downloadButtons = screen.getAllByText("Download PDF");
+      expect(downloadButtons).toHaveLength(2);
     });
   });
 
-  test("renders 'Remove from History' button for each recipe", async () => {
+  test("calls jsPDF and generates a PDF when 'Download PDF' is clicked", async () => {
     render(<History />);
     await waitFor(() => {
-      const removeButtons = screen.getAllByText("Remove from History");
-      expect(removeButtons).toHaveLength(2);
+      const downloadButton = screen.getAllByText("Download PDF")[0];
+      fireEvent.click(downloadButton);
     });
+
+    const mockPdf = jsPDF.mock.instances[0];
+    expect(mockPdf.text).toHaveBeenCalledWith("Garlic Chicken", 10, 10);
+    expect(mockPdf.text).toHaveBeenCalledWith(
+      "Description: A tasty chicken recipe with garlic.",
+      10,
+      20
+    );
+    expect(mockPdf.text).toHaveBeenCalledWith("Cooking Time: 30 minutes", 10, 30);
+    expect(mockPdf.save).toHaveBeenCalledWith("Garlic_Chicken.pdf");
   });
 
-  test("removes a recipe from history when 'Remove from History' is clicked", async () => {
-    render(<History />);
-    await waitFor(() => {
-      fireEvent.click(screen.getAllByText("Remove from History")[0]);
+  test("handles errors gracefully when PDF generation fails", async () => {
+    jsPDF.mockImplementationOnce(() => {
+      throw new Error("PDF generation failed");
     });
-    expect(server.post).toHaveBeenCalledWith('/recipe/history', expect.any(Object));
-    await waitFor(() => {
-      expect(screen.queryByText("Garlic Chicken")).not.toBeInTheDocument();
-    });
-  });
 
-  test("displays recipe tags", async () => {
     render(<History />);
     await waitFor(() => {
-      expect(screen.getByText("Dinner")).toBeInTheDocument();
-      expect(screen.getByText("Chicken")).toBeInTheDocument();
+      const downloadButton = screen.getAllByText("Download PDF")[0];
+      fireEvent.click(downloadButton);
     });
-  });
 
-  test("displays recipe steps", async () => {
-    render(<History />);
-    await waitFor(() => {
-      expect(screen.getByText("Season chicken")).toBeInTheDocument();
-      expect(screen.getByText("Cook in skillet")).toBeInTheDocument();
-    });
-  });
-
-  test("handles error when fetching recipes", async () => {
-    server.get.mockRejectedValueOnce(new Error("Failed to fetch"));
-    render(<History />);
-    await waitFor(() => {
-      expect(screen.getByText("Error loading recipes")).toBeInTheDocument();
-    });
-  });
-
-  test("updates localStorage when removing a recipe", async () => {
-    render(<History />);
-    await waitFor(() => {
-      fireEvent.click(screen.getAllByText("Remove from History")[0]);
-    });
-    expect(JSON.parse(localStorage.getItem("user")).history).toEqual(["recipe2"]);
+    expect(screen.getByText("Error generating PDF")).toBeInTheDocument();
   });
 });

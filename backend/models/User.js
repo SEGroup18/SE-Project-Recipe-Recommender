@@ -43,11 +43,19 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     salt: String,
-    history: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: 'Recipe',
-      default: []
-    },
+    history: [
+      {
+        recipeId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Recipe',
+          required: true
+        },
+        timestamp: {
+          type: Date,
+          default: Date.now
+        }
+      }
+    ],
   },
   {
     timestamps: true,

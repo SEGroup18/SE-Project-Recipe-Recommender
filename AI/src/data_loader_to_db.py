@@ -43,7 +43,7 @@ for i, value in enumerate(values):
         "ingredients": value["ingredients"].split(", "),
         "nutrients": nutrients, 
     }
-    res = requests.post("http://localhost:5000/recipe/add", json=new_val)
+    res = requests.post("http://localhost:5001/recipe/add", json=new_val)
 
     if res.status_code == 400 and not str(res.content).__contains__("E11000"):
         print(res.content)
