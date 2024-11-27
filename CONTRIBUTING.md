@@ -27,7 +27,7 @@ Please ensure that these guidelines are followed and any new ideas are encourage
 ## Code of Conduct
 
 This project and everyone particpating in it is governed by [Code of Conduct](https://github.com/SE-Fall-2024-Team-53/SE-Project-Recipe-Recommender/blob/main/CODE_OF_CONDUCT.md).
-Everyone contributing to this project should uphold this and any inappropriate behaviour should be reported to sguttha@ncsu.edu or skaonda@ncsu.edu or snandak3@ncsu.edu.
+Everyone contributing to this project should uphold this and any inappropriate behaviour should be reported to the team
 
 ## Doubts Related to Github
 
@@ -149,9 +149,9 @@ If you want to contribute and make an significant enhancement based on our proje
 
 The following are the team members who contributed and made this project.
 
-1. [Sai Sameer Guttha](https://github.com/saisameer1998)
-2. [Swaraj Kaondal](https://github.com/SwarajKaondal)
-3. [Shourya Nanda Kumar](https://github.com/shouryank)
+1. [Ishika Gandhi](https://github.com/ishika2201)
+2. [Aniruddha Shivananda](https://github.com/AShivan26)
+3. [Sai Kavya Marthala]
 
 ### Attribution
 
